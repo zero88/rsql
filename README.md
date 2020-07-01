@@ -1,2 +1,3 @@
-# jooq-rql
-jOOQ + RQL
+# Resource Query Language
+
+## Overview

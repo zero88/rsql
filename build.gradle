@@ -1,0 +1,68 @@
+plugins {
+    id 'nu.studer.jooq' version '3.0.3'
+}
+
+dependencies {
+    compile project(':ext:utils')
+    compile project(':ext:jpa-ext')
+    compile project.deps.classgraph
+    compile project.deps.database.jooq
+    // https://mvnrepository.com/artifact/cz.jirutka.rsql/rsql-parser
+    compile group: 'cz.jirutka.rsql', name: 'rsql-parser', version: '2.1.0'
+
+    testCompile project.deps.tests.junit
+    testCompile project.deps.logs.logback
+    testCompile project.deps.database.h2
+    testCompile project.deps.database.jooqMeta
+    testCompile project.deps.database.jooqMetaExt
+    testCompile project.deps.database.jooqCodegen
+    jooqRuntime project.deps.database.jooqMetaExt
+}
+
+jooq {
+    version = project.versions.database.jooq
+    edition = 'OSS'
+    sample(sourceSets.test) {
+        generator {
+            name = 'org.jooq.codegen.DefaultGenerator'
+            strategy {
+                name = 'org.jooq.codegen.DefaultGeneratorStrategy'
+            }
+            database {
+                name = "org.jooq.meta.extensions.ddl.DDLDatabase"
+                properties {
+                    property {
+                        key = 'scripts'
+                        value = 'src/test/resources/database.sql'
+                    }
+                    property {
+                        key = 'sort'
+                        value = 'semantic'
+                    }
+                    property {
+                        key = 'unqualifiedSchema'
+                        value = 'none'
+                    }
+                }
+            }
+            generate {
+                relations = true
+                deprecated = false
+                records = true
+                immutablePojos = true
+                fluentSetters = true
+                // ...
+            }
+            target {
+                packageName = 'io.github.zero.jooq.rql'
+                directory = project.genProps.javaTestSrcDir
+            }
+        }
+    }
+}
+
+task jooq(group: 'jooq') {
+    afterEvaluate {
+        dependsOn project.getTasksByName('generateSampleJooqSchemaSource', false)
+    }
+}
