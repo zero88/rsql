@@ -73,7 +73,6 @@ public interface Sortable extends Serializable {
          */
         DESC('-');
 
-        @NonNull
         private final char symbol;
 
         /**

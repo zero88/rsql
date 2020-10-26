@@ -5,7 +5,7 @@ import java.util.List;
 import org.jooq.Condition;
 import org.jooq.Field;
 
-import io.github.zero88.rql.jooq.ArgumentParser;
+import io.github.zero88.rql.jooq.JooqArgumentParser;
 
 import cz.jirutka.rsql.parser.ast.ComparisonNode;
 import cz.jirutka.rsql.parser.ast.ComparisonOperator;
@@ -21,7 +21,7 @@ public final class EqualBuilder extends AbstractComparisonCriteriaBuilder {
     }
 
     protected @NonNull Condition compare(@NonNull Field field, @NonNull List<String> arguments,
-                                         @NonNull ArgumentParser parser) {
+                                         @NonNull JooqArgumentParser parser) {
         return field.eq(parser.parse(field, arguments.get(0)));
     }
 

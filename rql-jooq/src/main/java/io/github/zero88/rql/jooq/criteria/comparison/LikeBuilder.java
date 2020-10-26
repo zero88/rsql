@@ -5,7 +5,7 @@ import java.util.List;
 import org.jooq.Condition;
 import org.jooq.Field;
 
-import io.github.zero88.rql.jooq.ArgumentParser;
+import io.github.zero88.rql.jooq.JooqArgumentParser;
 import io.github.zero.rql.parser.ast.BuiltinComparisonOperator;
 
 import cz.jirutka.rsql.parser.ast.ComparisonNode;
@@ -23,7 +23,7 @@ public final class LikeBuilder extends AbstractComparisonCriteriaBuilder {
 
     @Override
     protected @NonNull Condition compare(@NonNull Field field, @NonNull List<String> arguments,
-                                         @NonNull ArgumentParser parser) {
+                                         @NonNull JooqArgumentParser parser) {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 

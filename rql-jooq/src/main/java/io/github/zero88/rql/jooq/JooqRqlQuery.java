@@ -3,6 +3,7 @@ package io.github.zero88.rql.jooq;
 import org.jooq.DSLContext;
 
 import io.github.zero.rql.HasLog;
+import io.github.zero88.rql.jooq.criteria.JooqCriteriaBuilderFactory;
 import io.github.zero88.rql.jooq.visitor.JooqDSLRqlVisitor;
 
 import lombok.NonNull;
@@ -51,5 +52,9 @@ public interface JooqRqlQuery<R, T, C> extends JooqRqlFacade, HasLog {
      * @since 1.0.0
      */
     @NonNull R execute(@NonNull String query);
+
+    default @NonNull JooqCriteriaBuilderFactory criteriaBuilderFactory() {
+        return JooqRqlFacade.super.criteriaBuilderFactory();
+    }
 
 }

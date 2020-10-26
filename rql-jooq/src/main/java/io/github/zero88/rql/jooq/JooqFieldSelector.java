@@ -8,6 +8,8 @@ import org.jooq.SelectFieldOrAsterisk;
 import org.jooq.TableLike;
 import org.jooq.impl.DSL;
 
+import io.github.zero.rql.FieldSelector;
+
 import lombok.NonNull;
 
 /**
@@ -17,12 +19,12 @@ import lombok.NonNull;
  * @see TableLike
  * @since 1.0.0
  */
-public interface FieldSelector extends Supplier<Collection<? extends SelectFieldOrAsterisk>> {
+public interface JooqFieldSelector extends Supplier<Collection<? extends SelectFieldOrAsterisk>>, FieldSelector {
 
     /**
      * The constant DEFAULT.
      */
-    FieldSelector DEFAULT = () -> Collections.singleton(DSL.asterisk());
+    JooqFieldSelector DEFAULT = () -> Collections.singleton(DSL.asterisk());
 
     /**
      * Get fields

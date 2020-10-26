@@ -24,12 +24,12 @@ public final class JooqRqlParser {
     /**
      * The constant DEFAULT.
      */
-    public static JooqRqlParser DEFAULT = new JooqRqlParser();
+    public static final JooqRqlParser DEFAULT = new JooqRqlParser();
     @NonNull
     private final RSQLParser parser;
 
     /**
-     * Instantiates a new {@code jOOQ RQL} parser with default Comparision Operator.
+     * Instantiates a new {@code jOOQ RQL} parser with default Comparison Operator.
      *
      * @since 1.0.0
      */

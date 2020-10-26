@@ -2,7 +2,7 @@ package io.github.zero88.rql.jooq;
 
 import java.util.Optional;
 
-import io.github.zero88.rql.criteria.CriteriaBuilderFactory;
+import io.github.zero88.rql.jooq.criteria.JooqCriteriaBuilderFactory;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -14,16 +14,16 @@ import lombok.experimental.SuperBuilder;
 @Accessors(fluent = true)
 public abstract class AbstractJooqRqlFacade implements JooqRqlFacade {
 
-    private final QueryContext queryContext;
-    private final CriteriaBuilderFactory criteriaBuilderFactory;
+    private final JooqQueryContext queryContext;
+    private final JooqCriteriaBuilderFactory criteriaBuilderFactory;
 
     @Override
-    public @NonNull QueryContext queryContext() {
+    public @NonNull JooqQueryContext queryContext() {
         return Optional.ofNullable(queryContext).orElseGet(JooqRqlFacade.super::queryContext);
     }
 
     @Override
-    public @NonNull CriteriaBuilderFactory criteriaBuilderFactory() {
+    public @NonNull JooqCriteriaBuilderFactory criteriaBuilderFactory() {
         return Optional.ofNullable(criteriaBuilderFactory).orElseGet(JooqRqlFacade.super::criteriaBuilderFactory);
     }
 

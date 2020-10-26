@@ -1,10 +1,10 @@
-package io.github.zero88.rql.criteria.logical;
+package io.github.zero88.rql.jooq.criteria.logical;
 
 import java.util.function.BiFunction;
 
 import org.jooq.Condition;
 
-import io.github.zero88.rql.criteria.AbstractCriteriaBuilder;
+import io.github.zero.rql.criteria.AbstractCriteriaBuilder;
 
 import cz.jirutka.rsql.parser.ast.AndNode;
 import lombok.NonNull;

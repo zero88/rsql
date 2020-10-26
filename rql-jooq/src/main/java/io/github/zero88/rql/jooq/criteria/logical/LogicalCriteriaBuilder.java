@@ -1,4 +1,4 @@
-package io.github.zero88.rql.criteria.logical;
+package io.github.zero88.rql.jooq.criteria.logical;
 
 import java.util.function.BiFunction;
 
@@ -6,19 +6,19 @@ import org.jooq.Condition;
 import org.jooq.TableLike;
 import org.jooq.impl.DSL;
 
-import io.github.zero88.rql.jooq.QueryContext;
-import io.github.zero88.rql.criteria.CriteriaBuilder;
-import io.github.zero88.rql.criteria.CriteriaBuilderFactory;
+import io.github.zero88.rql.jooq.JooqQueryContext;
+import io.github.zero88.rql.jooq.criteria.JooqCriteriaBuilder;
+import io.github.zero88.rql.jooq.criteria.JooqCriteriaBuilderFactory;
 
 import cz.jirutka.rsql.parser.ast.LogicalNode;
 import cz.jirutka.rsql.parser.ast.Node;
 import lombok.NonNull;
 
-public interface LogicalCriteriaBuilder<T extends LogicalNode> extends CriteriaBuilder<T> {
+public interface LogicalCriteriaBuilder<T extends LogicalNode> extends JooqCriteriaBuilder<T> {
 
     @Override
-    default @NonNull Condition build(@NonNull TableLike table, @NonNull QueryContext queryContext,
-                                     @NonNull CriteriaBuilderFactory factory) {
+    default @NonNull Condition build(@NonNull TableLike table, @NonNull JooqQueryContext queryContext,
+                                     @NonNull JooqCriteriaBuilderFactory factory) {
         final Condition[] condition = new Condition[] {DSL.trueCondition()};
         boolean isFirst = true;
         for (Node node : node()) {
@@ -33,8 +33,8 @@ public interface LogicalCriteriaBuilder<T extends LogicalNode> extends CriteriaB
     }
 
     @NonNull
-    default Condition each(@NonNull TableLike table, @NonNull QueryContext queryContext,
-                           @NonNull CriteriaBuilderFactory factory, @NonNull Node subNode) {
+    default Condition each(@NonNull TableLike table, @NonNull JooqQueryContext queryContext,
+                           @NonNull JooqCriteriaBuilderFactory factory, @NonNull Node subNode) {
         return factory.create(subNode).build(table, queryContext, factory);
     }
 

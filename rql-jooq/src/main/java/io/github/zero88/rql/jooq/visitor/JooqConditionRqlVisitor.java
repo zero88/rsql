@@ -3,8 +3,8 @@ package io.github.zero88.rql.jooq.visitor;
 import org.jooq.Condition;
 import org.jooq.TableLike;
 
-import io.github.zero88.rql.jooq.QueryContext;
-import io.github.zero88.rql.criteria.CriteriaBuilderFactory;
+import io.github.zero88.rql.jooq.JooqQueryContext;
+import io.github.zero88.rql.jooq.criteria.JooqCriteriaBuilderFactory;
 
 import lombok.NonNull;
 
@@ -35,10 +35,10 @@ public interface JooqConditionRqlVisitor extends JooqNoArgsRqlVisitor<Condition>
      * @param queryContext the query context
      * @return the jooq condition rql visitor
      * @see TableLike
-     * @see QueryContext
+     * @see JooqQueryContext
      * @since 1.0.0
      */
-    static JooqConditionRqlVisitor create(@NonNull TableLike table, QueryContext queryContext) {
+    static JooqConditionRqlVisitor create(@NonNull TableLike table, JooqQueryContext queryContext) {
         return DefaultJooqConditionRqlVisitor.builder().table(table).queryContext(queryContext).build();
     }
 
@@ -50,12 +50,12 @@ public interface JooqConditionRqlVisitor extends JooqNoArgsRqlVisitor<Condition>
      * @param factory      the factory
      * @return the jooq condition rql visitor
      * @see TableLike
-     * @see QueryContext
-     * @see CriteriaBuilderFactory
+     * @see JooqQueryContext
+     * @see JooqCriteriaBuilderFactory
      * @since 1.0.0
      */
-    static JooqConditionRqlVisitor create(@NonNull TableLike table, QueryContext queryContext,
-                                          CriteriaBuilderFactory factory) {
+    static JooqConditionRqlVisitor create(@NonNull TableLike table, JooqQueryContext queryContext,
+                                          JooqCriteriaBuilderFactory factory) {
         return DefaultJooqConditionRqlVisitor.builder()
                                              .table(table)
                                              .queryContext(queryContext)

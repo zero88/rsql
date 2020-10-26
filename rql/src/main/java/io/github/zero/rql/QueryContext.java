@@ -1,6 +1,4 @@
-package io.github.zero88.rql.jooq;
-
-import io.github.zero.rql.LikeWildcardPattern;
+package io.github.zero.rql;
 
 import lombok.NonNull;
 
@@ -10,11 +8,6 @@ import lombok.NonNull;
  * @since 1.0.0
  */
 public interface QueryContext {
-
-    /**
-     * The constant DEFAULT.
-     */
-    QueryContext DEFAULT = new QueryContext() {};
 
     /**
      * Like wildcard like wildcard pattern.
@@ -34,9 +27,7 @@ public interface QueryContext {
      * @see FieldSelector
      * @since 1.0.0
      */
-    default @NonNull FieldSelector fieldSelector() {
-        return FieldSelector.DEFAULT;
-    }
+    @NonNull FieldSelector fieldSelector();
 
     /**
      * Field mapper.
@@ -45,9 +36,7 @@ public interface QueryContext {
      * @see FieldMapper
      * @since 1.0.0
      */
-    default @NonNull FieldMapper fieldMapper() {
-        return FieldMapper.DEFAULT;
-    }
+    @NonNull FieldMapper fieldMapper();
 
     /**
      * Argument parser.
@@ -56,8 +45,6 @@ public interface QueryContext {
      * @see ArgumentParser
      * @since 1.0.0
      */
-    default @NonNull ArgumentParser argumentParser() {
-        return ArgumentParser.DEFAULT;
-    }
+    @NonNull ArgumentParser argumentParser();
 
 }

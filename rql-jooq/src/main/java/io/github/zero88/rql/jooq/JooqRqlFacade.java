@@ -1,6 +1,7 @@
 package io.github.zero88.rql.jooq;
 
-import io.github.zero88.rql.criteria.CriteriaBuilderFactory;
+import io.github.zero.rql.RqlFacade;
+import io.github.zero88.rql.jooq.criteria.JooqCriteriaBuilderFactory;
 
 import lombok.NonNull;
 
@@ -9,28 +10,28 @@ import lombok.NonNull;
  *
  * @since 1.0.0
  */
-public interface JooqRqlFacade {
+public interface JooqRqlFacade extends RqlFacade {
 
     /**
      * Gets Query context.
      *
      * @return the query context
-     * @see QueryContext
+     * @see JooqQueryContext
      * @since 1.0.0
      */
-    default @NonNull QueryContext queryContext() {
-        return QueryContext.DEFAULT;
+    default @NonNull JooqQueryContext queryContext() {
+        return JooqQueryContext.DEFAULT;
     }
 
     /**
      * Criteria builder factory criteria builder factory.
      *
      * @return the criteria builder factory
-     * @see CriteriaBuilderFactory
+     * @see JooqCriteriaBuilderFactory
      * @since 1.0.0
      */
-    default @NonNull CriteriaBuilderFactory criteriaBuilderFactory() {
-        return CriteriaBuilderFactory.DEFAULT;
+    default @NonNull JooqCriteriaBuilderFactory criteriaBuilderFactory() {
+        return JooqCriteriaBuilderFactory.DEFAULT;
     }
 
 }
