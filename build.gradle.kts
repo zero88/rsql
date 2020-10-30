@@ -1,6 +1,7 @@
 plugins {
     base
     `java-library`
+    jacoco
 }
 
 allprojects {
@@ -26,6 +27,7 @@ subprojects {
     apply(plugin = "java-library")
     apply(plugin = "eclipse")
     apply(plugin = "idea")
+    apply(plugin = "jacoco")
     val depVersions: Map<String, String> by ext
 
     dependencies {
@@ -51,3 +53,6 @@ dependencies {
     }
 }
 
+tasks.jacocoTestReport {
+    dependsOn(tasks.test) // tests are required to run before generating the report
+}
