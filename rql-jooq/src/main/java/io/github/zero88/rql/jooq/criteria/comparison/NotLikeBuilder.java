@@ -7,13 +7,14 @@ import org.jooq.Field;
 
 import io.github.zero88.rql.jooq.JooqArgumentParser;
 import io.github.zero.rql.parser.ast.BuiltinComparisonOperator;
+import io.github.zero88.rql.jooq.criteria.JooqComparisonCriteriaBuilder;
 
 import cz.jirutka.rsql.parser.ast.ComparisonNode;
 import cz.jirutka.rsql.parser.ast.ComparisonOperator;
 import lombok.NonNull;
 
 //TODO implement it
-public final class NotLikeBuilder extends AbstractComparisonCriteriaBuilder {
+public final class NotLikeBuilder extends JooqComparisonCriteriaBuilder {
 
     public static final ComparisonOperator OPERATOR = BuiltinComparisonOperator.NOT_LIKE;
 

@@ -4,11 +4,10 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import org.jooq.Condition;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import io.github.zero88.jooq.rql.Tables;
+import io.github.zero.rql.jooq.Tables;
 import io.github.zero88.rql.jooq.criteria.JooqCriteriaBuilderFactory;
 import io.github.zero88.utils.Strings;
 
@@ -27,9 +26,9 @@ public class CriteriaBuilderTest {
                                                           Collections.singletonList("true"));
         final AndNode node = new AndNode(Arrays.asList(eqNode1, eqNode2));
         final Condition condition = JooqCriteriaBuilderFactory.DEFAULT.create(node).build(Tables.ALL_DATA_TYPE);
-        Assert.assertEquals("( 1 = 1 and \"PUBLIC\".\"ALL_DATA_TYPE\".\"F_STR\" = 'abc' and \"PUBLIC\"" +
-                            ".\"ALL_DATA_TYPE\".\"F_BOOL\" = true )",
-                            Strings.optimizeMultipleSpace(condition.toString()));
+        Assertions.assertEquals(
+            "( true and \"ALL_DATA_TYPE\".\"F_STR\" = 'abc' and \"ALL_DATA_TYPE\".\"F_BOOL\" = true )",
+            Strings.optimizeMultipleSpace(condition.toString()));
     }
 
     @Test
@@ -41,9 +40,9 @@ public class CriteriaBuilderTest {
                                                           Collections.singletonList("xyz"));
         final OrNode node = new OrNode(Arrays.asList(eqNode1, eqNode2));
         final Condition condition = JooqCriteriaBuilderFactory.DEFAULT.create(node).build(Tables.ALL_DATA_TYPE);
-        Assert.assertEquals("( ( 1 = 1 and \"PUBLIC\".\"ALL_DATA_TYPE\".\"F_DURATION\" = 'abc' ) or \"PUBLIC\"" +
-                            ".\"ALL_DATA_TYPE\".\"F_PERIOD\" = 'xyz' )",
-                            Strings.optimizeMultipleSpace(condition.toString()));
+        Assertions.assertEquals(
+            "( ( true and \"ALL_DATA_TYPE\".\"F_DURATION\" = 'abc' ) or \"ALL_DATA_TYPE\".\"F_PERIOD\" = 'xyz' )",
+            Strings.optimizeMultipleSpace(condition.toString()));
     }
 
     @Test
@@ -60,10 +59,10 @@ public class CriteriaBuilderTest {
         final OrNode orNode = new OrNode(Arrays.asList(eqNode3, eqNode4));
         final AndNode node = new AndNode(Arrays.asList(eqNode1, eqNode2, orNode));
         final Condition condition = JooqCriteriaBuilderFactory.DEFAULT.create(node).build(Tables.ALL_DATA_TYPE);
-        Assert.assertEquals("( 1 = 1 and \"PUBLIC\".\"ALL_DATA_TYPE\".\"F_STR\" = 'abc' and \"PUBLIC\"" +
-                            ".\"ALL_DATA_TYPE\".\"F_BOOL\" = true and ( ( 1 = 1 and \"PUBLIC\".\"ALL_DATA_TYPE\"" +
-                            ".\"F_DURATION\" = 'def' ) or \"PUBLIC\".\"ALL_DATA_TYPE\".\"F_PERIOD\" = 'xyz' ) )",
-                            Strings.optimizeMultipleSpace(condition.toString()));
+        Assertions.assertEquals(
+            "( true and \"ALL_DATA_TYPE\".\"F_STR\" = 'abc' and \"ALL_DATA_TYPE\".\"F_BOOL\" = true and " +
+            "( ( true and \"ALL_DATA_TYPE\".\"F_DURATION\" = 'def' ) or \"ALL_DATA_TYPE\".\"F_PERIOD\" = 'xyz' ) )",
+            Strings.optimizeMultipleSpace(condition.toString()));
     }
 
 }

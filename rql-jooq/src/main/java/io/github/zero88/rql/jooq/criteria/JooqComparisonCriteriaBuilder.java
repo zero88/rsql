@@ -1,4 +1,4 @@
-package io.github.zero88.rql.jooq.criteria.comparison;
+package io.github.zero88.rql.jooq.criteria;
 
 import java.util.List;
 
@@ -13,8 +13,6 @@ import io.github.zero.rql.parser.ast.ComparisonOperatorProxy;
 import io.github.zero88.rql.jooq.JooqArgumentParser;
 import io.github.zero88.rql.jooq.JooqFieldMapper;
 import io.github.zero88.rql.jooq.JooqQueryContext;
-import io.github.zero88.rql.jooq.criteria.JooqCriteriaBuilder;
-import io.github.zero88.rql.jooq.criteria.JooqCriteriaBuilderFactory;
 
 import cz.jirutka.rsql.parser.ast.ComparisonNode;
 import lombok.Getter;
@@ -23,18 +21,18 @@ import lombok.experimental.Accessors;
 
 @Getter
 @Accessors(fluent = true)
-public abstract class AbstractComparisonCriteriaBuilder extends AbstractCriteriaBuilder<ComparisonNode>
+public abstract class JooqComparisonCriteriaBuilder extends AbstractCriteriaBuilder<ComparisonNode>
     implements JooqCriteriaBuilder<ComparisonNode>, ComparisonCriteriaBuilder<ComparisonOperatorProxy> {
 
     @NonNull
     private final ComparisonOperatorProxy operator;
 
-    public AbstractComparisonCriteriaBuilder(@NonNull ComparisonNode node) {
+    public JooqComparisonCriteriaBuilder(@NonNull ComparisonNode node) {
         this(node, ComparisonOperatorProxy.asProxy(node.getOperator()));
     }
 
-    protected AbstractComparisonCriteriaBuilder(@NonNull ComparisonNode node,
-                                                @NonNull ComparisonOperatorProxy operator) {
+    protected JooqComparisonCriteriaBuilder(@NonNull ComparisonNode node,
+                                            @NonNull ComparisonOperatorProxy operator) {
         super(node);
         this.operator = operator;
     }

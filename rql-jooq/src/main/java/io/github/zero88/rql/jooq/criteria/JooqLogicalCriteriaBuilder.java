@@ -1,4 +1,4 @@
-package io.github.zero88.rql.jooq.criteria.logical;
+package io.github.zero88.rql.jooq.criteria;
 
 import java.util.function.BiFunction;
 
@@ -7,14 +7,12 @@ import org.jooq.TableLike;
 import org.jooq.impl.DSL;
 
 import io.github.zero88.rql.jooq.JooqQueryContext;
-import io.github.zero88.rql.jooq.criteria.JooqCriteriaBuilder;
-import io.github.zero88.rql.jooq.criteria.JooqCriteriaBuilderFactory;
 
 import cz.jirutka.rsql.parser.ast.LogicalNode;
 import cz.jirutka.rsql.parser.ast.Node;
 import lombok.NonNull;
 
-public interface LogicalCriteriaBuilder<T extends LogicalNode> extends JooqCriteriaBuilder<T> {
+public interface JooqLogicalCriteriaBuilder<T extends LogicalNode> extends JooqCriteriaBuilder<T> {
 
     @Override
     default @NonNull Condition build(@NonNull TableLike table, @NonNull JooqQueryContext queryContext,

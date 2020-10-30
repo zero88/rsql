@@ -1,10 +1,10 @@
 package io.github.zero88.rql.jooq.criteria;
 
+import io.github.zero.rql.criteria.ComparisonCriteriaBuilder;
 import io.github.zero.rql.criteria.CriteriaBuilder;
 import io.github.zero.rql.criteria.CriteriaBuilderFactory;
 import io.github.zero88.rql.jooq.criteria.logical.AndNodeCriteriaBuilder;
 import io.github.zero88.rql.jooq.criteria.logical.OrNodeCriteriaBuilder;
-import io.github.zero.rql.criteria.ComparisonCriteriaBuilder;
 
 import cz.jirutka.rsql.parser.ast.AndNode;
 import cz.jirutka.rsql.parser.ast.ComparisonNode;
@@ -36,7 +36,8 @@ public interface JooqCriteriaBuilderFactory extends CriteriaBuilderFactory<Node,
 
     @Override
     default @NonNull CriteriaBuilder<ComparisonNode> comparisonNodeCriteriaBuilder(@NonNull ComparisonNode node) {
-        return ComparisonCriteriaBuilder.create(node);
+        final Class<JooqComparisonCriteriaBuilder> parent = JooqComparisonCriteriaBuilder.class;
+        return ComparisonCriteriaBuilder.create(node, parent, parent.getPackage().getName() + ".comparison");
     }
 
 }

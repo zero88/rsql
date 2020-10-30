@@ -6,5 +6,3 @@ dependencies {
     api("org.slf4j:slf4j-api:${depVersions["slf4j"]}")
     api("cz.jirutka.rsql:rsql-parser:${depVersions["rsql"]}")
 }
-
-

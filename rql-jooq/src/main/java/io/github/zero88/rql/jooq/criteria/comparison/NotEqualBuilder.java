@@ -6,13 +6,14 @@ import org.jooq.Condition;
 import org.jooq.Field;
 
 import io.github.zero88.rql.jooq.JooqArgumentParser;
+import io.github.zero88.rql.jooq.criteria.JooqComparisonCriteriaBuilder;
 
 import cz.jirutka.rsql.parser.ast.ComparisonNode;
 import cz.jirutka.rsql.parser.ast.ComparisonOperator;
 import cz.jirutka.rsql.parser.ast.RSQLOperators;
 import lombok.NonNull;
 
-public final class NotEqualBuilder extends AbstractComparisonCriteriaBuilder {
+public final class NotEqualBuilder extends JooqComparisonCriteriaBuilder {
 
     public static final ComparisonOperator OPERATOR = RSQLOperators.NOT_EQUAL;
 

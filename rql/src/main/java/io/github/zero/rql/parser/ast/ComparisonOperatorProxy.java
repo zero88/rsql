@@ -87,9 +87,9 @@ public interface ComparisonOperatorProxy {
     }
 
     /**
-     * Get set of default comparision operators.
+     * Get set of default comparison operators.
      *
-     * @return the default comparision operators
+     * @return the default comparison operators
      * @since 1.0.0
      */
     static Set<ComparisonOperatorProxy> operators() {

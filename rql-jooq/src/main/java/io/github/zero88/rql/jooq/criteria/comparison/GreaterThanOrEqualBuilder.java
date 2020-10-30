@@ -6,13 +6,14 @@ import org.jooq.Condition;
 import org.jooq.Field;
 
 import io.github.zero88.rql.jooq.JooqArgumentParser;
+import io.github.zero88.rql.jooq.criteria.JooqComparisonCriteriaBuilder;
 
 import cz.jirutka.rsql.parser.ast.ComparisonNode;
 import cz.jirutka.rsql.parser.ast.ComparisonOperator;
 import cz.jirutka.rsql.parser.ast.RSQLOperators;
 import lombok.NonNull;
 
-public final class GreaterThanOrEqualBuilder extends AbstractComparisonCriteriaBuilder {
+public final class GreaterThanOrEqualBuilder extends JooqComparisonCriteriaBuilder {
 
     public static final ComparisonOperator OPERATOR = RSQLOperators.GREATER_THAN_OR_EQUAL;
 

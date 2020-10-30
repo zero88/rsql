@@ -9,7 +9,8 @@ allprojects {
     ext {
         set("depVersions", mapOf("slf4j" to "1.7.30", "logback" to "1.2.3", "jackson" to "2.11.3",
                                  "lombok" to "1.18.16", "junit5" to "5.7.0", "jsonassert" to "1.5.0",
-                                 "jooq" to "3.14.0", "rsql" to "2.1.0", "sonarqube" to "3.0"))
+                                 "jooq" to "3.14.0", "rsql" to "2.1.0", "h2" to "1.4.200",
+                                 "sonarqube" to "3.0"))
     }
 
     repositories {
