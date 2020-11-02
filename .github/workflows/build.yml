@@ -4,7 +4,7 @@ on:
   push:
     branches: [ master ]
     paths-ignore:
-      - '.github/**'
+      - '.github/ISSUE_TEMPLATE/**'
       - 'CHANGELOG.md'
       - 'README.md'
       - 'LICENSE'
@@ -112,7 +112,7 @@ jobs:
         shell: bash
         run: |
           shouldBuild=${{ steps.checkVersion.outputs.isSameVersion == 'true' && steps.check.outputs.isAfterReleaseMerged == 'false' }}
-          shouldBuild=$shouldBuild && ${{ steps.check.outputs.isPR != 'true' || github.event.action != 'closed') }}
+          shouldBuild=$shouldBuild && ${{ steps.check.outputs.isPR != 'true' || github.event.action != 'closed' }}
           shouldAnlysis=$shouldBuild && ${{ needs.context.outputs.isSkipPublish != 'true' }}
           shouldPublish=$shouldAnlysis && ${{ needs.context.outputs.isOnMaster == 'true' }}
           shouldTag=${{ steps.check.outputs.isReleasePR == 'true' && github.event.action == 'closed' && github.event.pull_request.merged }}
@@ -188,6 +188,7 @@ jobs:
 
   analysis:
     runs-on: ubuntu-latest
+    needs: context
     if: needs.context.outputs.shouldAnalysis == 'true'
     steps:
       - uses: actions/checkout@v2
