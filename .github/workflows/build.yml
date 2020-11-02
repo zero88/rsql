@@ -117,6 +117,9 @@ jobs:
           [[ $shouldAnlysis == true && "${{ needs.context.outputs.isOnMaster }}" == 'true' ]] && shouldPublish=true || shouldPublish=false
 
           echo "Conclusion:"
+          echo "- Branch? ${{ steps.check.outputs.branch }}"
+          echo "- Version? ${{ steps.checkVersion.outputs.version }}"
+          echo "- Semantic version? ${{ steps.checkVersion.outputs.semanticVersion }}"
           echo "- Should build? $shouldBuild"
           echo "- Should analysis? $shouldAnlysis"
           echo "- Should publish? $shouldPublish"
