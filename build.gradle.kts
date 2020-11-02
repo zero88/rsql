@@ -12,6 +12,8 @@ plugins {
     id("org.sonarqube") version "3.0"
     id("io.codearte.nexus-staging") version "0.22.0"
 }
+val jacocoHtml: String? by project
+val semanticVersion: String by project
 
 allprojects {
     group = "io.github.zero88"
@@ -40,6 +42,7 @@ subprojects {
     apply(plugin = "signing")
     apply(plugin = "maven-publish")
     val depVersions: Map<String, String> by ext
+    project.version = "$version$semanticVersion"
 
     java {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -160,10 +163,10 @@ task<JacocoReport>("jacocoRootReport") {
     })
     reports {
         csv.isEnabled = false
-        html.isEnabled = true
         xml.isEnabled = true
-        html.destination = file("${buildDir}/reports/jacoco/html")
         xml.destination = file("${buildDir}/reports/jacoco/coverage.xml")
+        html.isEnabled = (jacocoHtml ?: "true").toBoolean()
+        html.destination = file("${buildDir}/reports/jacoco/html")
     }
 }
 

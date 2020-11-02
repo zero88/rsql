@@ -129,7 +129,7 @@ jobs:
                           -PbuildBy="GitHub Action" -PbuildHash=${{ github.sha }}
 
       - name: Test
-        run: ./gradlew jooq test jacocoTestReport
+        run: ./gradlew jacocoRootReport -PjacocoHtml=false
 
       - name: SonarQube
         if: needs.context.outputs.isSkipPublish != 'true'

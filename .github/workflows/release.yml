@@ -48,7 +48,7 @@ jobs:
         run: ./gradlew clean build -x test -PbuildBy="GitHub Action" -PbuildHash=${{ github.sha }}
 
       - name: Test
-        run: ./gradlew test jacocoTestReport
+        run: ./gradlew jacocoRootReport -PjacocoHtml=false
 
       - name: SonarQube
         run: ./gradlew sonarqube -Dsonar.login=${{ secrets.OSS_SONARQUBE_TOKEN }} -Dsonar.branch.name=${{ needs.context.outputs.branch }}
