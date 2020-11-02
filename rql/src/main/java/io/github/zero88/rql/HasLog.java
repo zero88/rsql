@@ -1,4 +1,4 @@
-package io.github.zero.rql;
+package io.github.zero88.rql;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

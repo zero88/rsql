@@ -1,6 +1,6 @@
 package io.github.zero88.rql.jooq;
 
-import io.github.zero.rql.RqlVisitor;
+import io.github.zero88.rql.RqlVisitor;
 import io.github.zero88.rql.jooq.criteria.JooqCriteriaBuilderFactory;
 
 import cz.jirutka.rsql.parser.ast.RSQLVisitor;

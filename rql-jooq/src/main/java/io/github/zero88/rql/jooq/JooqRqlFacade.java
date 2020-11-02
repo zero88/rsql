@@ -1,6 +1,6 @@
 package io.github.zero88.rql.jooq;
 
-import io.github.zero.rql.RqlFacade;
+import io.github.zero88.rql.RqlFacade;
 import io.github.zero88.rql.jooq.criteria.JooqCriteriaBuilderFactory;
 
 import lombok.NonNull;

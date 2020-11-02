@@ -1,4 +1,4 @@
-package io.github.zero.rql.parser.ast;
+package io.github.zero88.rql.parser.ast;
 
 import cz.jirutka.rsql.parser.ast.ComparisonOperator;
 

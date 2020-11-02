@@ -4,7 +4,7 @@ import org.jooq.Condition;
 import org.jooq.Table;
 import org.jooq.TableLike;
 
-import io.github.zero.rql.criteria.CriteriaBuilder;
+import io.github.zero88.rql.criteria.CriteriaBuilder;
 import io.github.zero88.rql.jooq.JooqQueryContext;
 
 import cz.jirutka.rsql.parser.ast.Node;

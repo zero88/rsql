@@ -6,9 +6,9 @@ import java.util.stream.Collectors;
 import org.jooq.Condition;
 import org.jooq.TableLike;
 
-import io.github.zero.rql.parser.ast.ComparisonOperatorProxy;
 import io.github.zero88.rql.jooq.visitor.JooqConditionRqlVisitor;
 import io.github.zero88.rql.jooq.visitor.JooqDSLRqlVisitor;
+import io.github.zero88.rql.parser.ast.ComparisonOperatorProxy;
 
 import cz.jirutka.rsql.parser.RSQLParser;
 import cz.jirutka.rsql.parser.RSQLParserException;

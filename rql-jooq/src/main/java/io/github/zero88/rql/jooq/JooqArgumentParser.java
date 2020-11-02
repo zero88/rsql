@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 import org.jooq.Field;
 
-import io.github.zero.rql.ArgumentParser;
+import io.github.zero88.rql.ArgumentParser;
 import io.github.zero88.utils.DateTimes;
 import io.github.zero88.utils.DateTimes.Iso8601Parser;
 import io.github.zero88.utils.Strings;

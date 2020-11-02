@@ -1,11 +1,16 @@
-package io.github.zero.rql;
+package io.github.zero88.rql;
 
-import io.github.zero.rql.criteria.CriteriaBuilder;
-import io.github.zero.rql.criteria.CriteriaBuilderFactory;
+import io.github.zero88.rql.criteria.CriteriaBuilder;
+import io.github.zero88.rql.criteria.CriteriaBuilderFactory;
 
 import cz.jirutka.rsql.parser.ast.Node;
 import lombok.NonNull;
 
+/**
+ * Represents for a facade that wraps some condiments to enhance parsing SQL query in runtime
+ *
+ * @since 1.0.0
+ */
 public interface RqlFacade {
 
     /**
@@ -13,16 +18,16 @@ public interface RqlFacade {
      *
      * @return the query context
      * @see QueryContext
-     * @since 1.0.0
      */
     @NonNull QueryContext queryContext();
 
     /**
      * Criteria builder factory criteria builder factory.
      *
+     * @param <T> Type of {@link Node}
+     * @param <C> Type of {@link CriteriaBuilder}
      * @return the criteria builder factory
      * @see CriteriaBuilderFactory
-     * @since 1.0.0
      */
     @NonNull <T extends Node, C extends CriteriaBuilder<T>> CriteriaBuilderFactory<T, C> criteriaBuilderFactory();
 

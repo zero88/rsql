@@ -1,6 +1,4 @@
-package io.github.zero.rql.criteria;
-
-import io.github.zero.rql.criteria.CriteriaBuilder;
+package io.github.zero88.rql.criteria;
 
 import cz.jirutka.rsql.parser.ast.Node;
 import lombok.Getter;

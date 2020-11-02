@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
-import io.github.zero.rql.parser.ast.ComparisonOperatorProxy;
+import io.github.zero88.rql.parser.ast.ComparisonOperatorProxy;
 
 public class ComparisonOperatorProxyTest {
 

@@ -51,7 +51,7 @@ jooq {
                         withFluentSetters(true)
                     }
                     target.apply {
-                        packageName = "io.github.zero.rql.jooq"
+                        packageName = "io.github.zero88.rql.jooq"
                         directory = "generated/test/java"
                     }
                 }
@@ -60,7 +60,12 @@ jooq {
     }
 }
 
-tasks.register("jooq") {
+task("jooqTest") {
+    group = "jooq"
     dependsOn(project.getTasksByName("generateTestJooq", false))
+}
+
+tasks.compileTestJava {
+    dependsOn(tasks["jooqTest"])
 }
 

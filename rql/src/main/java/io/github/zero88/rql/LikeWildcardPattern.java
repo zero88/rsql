@@ -1,4 +1,4 @@
-package io.github.zero.rql;
+package io.github.zero88.rql;
 
 import lombok.NonNull;
 
@@ -16,7 +16,6 @@ public interface LikeWildcardPattern {
      * Stands for any sequence of characters (including the empty sequence)
      *
      * @return the sequence pattern
-     * @since 1.0.0
      */
     default @NonNull char zeroOrMore() {
         return '*';
@@ -26,7 +25,6 @@ public interface LikeWildcardPattern {
      * Stands for any single character.
      *
      * @return the single pattern
-     * @since 1.0.0
      */
     default @NonNull char single() {
         return '?';

@@ -1,4 +1,4 @@
-package io.github.zero.rql.criteria;
+package io.github.zero88.rql.criteria;
 
 import cz.jirutka.rsql.parser.ast.AndNode;
 import cz.jirutka.rsql.parser.ast.ComparisonNode;

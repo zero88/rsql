@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.jooq.Field;
 import org.jooq.TableLike;
 
-import io.github.zero.rql.FieldMapper;
+import io.github.zero88.rql.FieldMapper;
 import io.github.zero88.utils.Strings;
 
 import lombok.NonNull;
