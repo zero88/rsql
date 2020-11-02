@@ -111,11 +111,10 @@ jobs:
         id: conclusion
         shell: bash
         run: |
-          shouldBuild=${{ steps.checkVersion.outputs.isSameVersion == 'true' && steps.check.outputs.isAfterReleaseMerged == 'false' }}
-          shouldBuild=$shouldBuild && ${{ steps.check.outputs.isPR != 'true' || github.event.action != 'closed' }}
-          shouldAnlysis=$shouldBuild && ${{ needs.context.outputs.isSkipPublish != 'true' }}
-          shouldPublish=$shouldAnlysis && ${{ needs.context.outputs.isOnMaster == 'true' }}
+          shouldBuild=${{ steps.checkVersion.outputs.isSameVersion == 'true' && steps.check.outputs.isAfterReleaseMerged == 'false' && (steps.check.outputs.isPR != 'true' || github.event.action != 'closed') }}
           shouldTag=${{ steps.check.outputs.isReleasePR == 'true' && github.event.action == 'closed' && github.event.pull_request.merged }}
+          [[ $shouldBuild == true && "${{ needs.context.outputs.isSkipPublish }}" != 'true' ]] && shouldAnlysis=true || shouldAnlysis=false
+          [[ $shouldAnlysis == true && "${{ needs.context.outputs.isOnMaster }}" == 'true' ]] && shouldPublish=true || shouldPublish=false
 
           echo "Conclusion:"
           echo "- Should build? $shouldBuild"
@@ -215,7 +214,7 @@ jobs:
   tag:
     runs-on: ubuntu-latest
     needs: context
-    if: needs.context.outputs.isReleasePR == 'true' && github.event.action == 'closed' && github.event.pull_request.merged
+    if: needs.context.outputs.shouldTag == 'true'
     steps:
       - uses: actions/checkout@v2
         with:
