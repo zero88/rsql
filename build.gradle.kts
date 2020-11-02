@@ -174,7 +174,9 @@ project.tasks["sonarqube"].group = "analysis"
 project.tasks["sonarqube"].dependsOn("build", "jacocoRootReport")
 sonarqube {
     properties {
+        property("jacocoHtml", "false")
         property("sonar.sourceEncoding", "UTF-8")
+        property("sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/reports/jacoco/coverage.xml")
     }
 }
 
