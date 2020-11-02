@@ -45,10 +45,7 @@ jobs:
           java-version: 1.8
 
       - name: Build
-        run: ./gradlew clean build -x test -PbuildBy="GitHub Action" -PbuildHash=${{ github.sha }}
-
-      - name: Test
-        run: ./gradlew jacocoRootReport -PjacocoHtml=false
+        run: ./gradlew clean build -PbuildBy="GitHub Action" -PbuildHash=${{ github.sha }}
 
       - name: Publish GitHub Package
         run: |
@@ -77,6 +74,7 @@ jobs:
 
   analysis:
     runs-on: ubuntu-latest
+    needs: context
     steps:
       - uses: actions/checkout@v2
 
@@ -85,14 +83,15 @@ jobs:
         with:
           java-version: 11
 
+      - name: Test
+        run: ./gradlew jacocoRootReport -PjacocoHtml=false
+
       - name: SonarQube
-        if: needs.context.outputs.isSkipPublish != 'true'
         run: ./gradlew sonarqube -Dsonar.login=${{ secrets.OSS_SONARQUBE_TOKEN }} -Dsonar.branch.name=${{ needs.context.outputs.branch }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Cache SonarCloud packages
-        if: needs.context.outputs.isSkipPublish != 'true'
         uses: actions/cache@v1
         with:
           path: ~/.sonar/cache

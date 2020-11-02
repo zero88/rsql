@@ -4,7 +4,7 @@ on:
   push:
     branches: [ master ]
     paths-ignore:
-      - '.github/**'
+      - '.github/ISSUE_TEMPLATE/**'
       - 'CHANGELOG.md'
       - 'README.md'
       - 'LICENSE'
@@ -17,13 +17,12 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       branch: ${{ steps.check.outputs.branch }}
-      isOnMaster: ${{ steps.check.outputs.isOnMaster }}
-      isSkipPublish: ${{ steps.check.outputs.isSkipPublish }}
-      isPR: ${{ steps.check.outputs.isPR }}
-      isReleasePR: ${{ steps.check.outputs.isReleasePR }}
       version: ${{ steps.checkVersion.outputs.version }}
       semanticVersion: ${{ steps.checkVersion.outputs.semanticVersion }}
-      shouldBuild: ${{ steps.checkVersion.outputs.isSameVersion == 'true' && steps.check.outputs.isAfterReleaseMerged == 'false' }}
+      shouldBuild: ${{ steps.conclusion.outputs.shouldBuild }}
+      shouldAnalysis: ${{ steps.conclusion.outputs.shouldAnalysis }}
+      shouldPublish: ${{ steps.conclusion.outputs.shouldPublish }}
+      shouldTag: ${{ steps.conclusion.outputs.shouldTag }}
 
     steps:
       - name: debug
@@ -108,11 +107,33 @@ jobs:
           git show --shortstat --show-signature
           git push
 
+      - name: Conclusion
+        id: conclusion
+        shell: bash
+        run: |
+          shouldBuild=${{ steps.checkVersion.outputs.isSameVersion == 'true' && steps.check.outputs.isAfterReleaseMerged == 'false' && (steps.check.outputs.isPR != 'true' || github.event.action != 'closed') }}
+          shouldTag=${{ steps.check.outputs.isReleasePR == 'true' && github.event.action == 'closed' && github.event.pull_request.merged }}
+          [[ $shouldBuild == true && "${{ needs.context.outputs.isSkipPublish }}" != 'true' ]] && shouldAnalysis=true || shouldAnalysis=false
+          [[ $shouldAnalysis == true && "${{ needs.context.outputs.isOnMaster }}" == 'true' ]] && shouldPublish=true || shouldPublish=false
+
+          echo "Conclusion:"
+          echo "- Branch? ${{ steps.check.outputs.branch }}"
+          echo "- Version? ${{ steps.checkVersion.outputs.version }}"
+          echo "- Semantic version? ${{ steps.checkVersion.outputs.semanticVersion }}"
+          echo "- Should build? $shouldBuild"
+          echo "- Should analysis? $shouldAnalysis"
+          echo "- Should publish? $shouldPublish"
+          echo "- Should tag? $shouldTag"
+
+          echo ::set-output name=shouldBuild::$shouldBuild
+          echo ::set-output name=shouldAnalysis::$shouldAnalysis
+          echo ::set-output name=shouldPublish::$shouldPublish
+          echo ::set-output name=shouldTag::$shouldTag
 
   build:
     runs-on: ubuntu-latest
     needs: context
-    if: needs.context.outputs.shouldBuild == 'true' && (needs.context.outputs.isPR != 'true' || github.event.action != 'closed')
+    if: needs.context.outputs.shouldBuild == 'true'
     steps:
       - uses: actions/checkout@v2
 
@@ -123,25 +144,15 @@ jobs:
 
       - name: Build
         run: |
-          ./gradlew clean build -x test \
+          ./gradlew clean build \
                           -Pversion=${{ needs.context.outputs.version }} \
                           -PsemanticVersion=${{needs.context.outputs.semanticVersion }} \
                           -PbuildBy="GitHub Action" -PbuildHash=${{ github.sha }}
 
-      - name: Test
-        run: ./gradlew jacocoRootReport -PjacocoHtml=false
-
-      - name: Cache Gradle packages
-        uses: actions/cache@v1
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
-          restore-keys: ${{ runner.os }}-gradle
-
       - name: Import GPG key
         id: import_gpg
         uses: crazy-max/ghaction-import-gpg@v2
-        if: needs.context.outputs.isOnMaster == 'true' && needs.context.outputs.isSkipPublish != 'true'
+        if: needs.context.outputs.shouldPublish == 'true'
         with:
           git_user_signingkey: true
         env:
@@ -149,7 +160,7 @@ jobs:
           PASSPHRASE: ${{ secrets.CI_GPG_PASSPHARSE }}
 
       - name: Publish GitHub Package
-        if: needs.context.outputs.isOnMaster == 'true' && needs.context.outputs.isSkipPublish != 'true'
+        if: needs.context.outputs.shouldPublish == 'true'
         run: |
           ./gradlew publish -Psigning.gnupg.homeDir=/home/runner/.gnupg \
                             -Psigning.gnupg.keyName=${{ steps.import_gpg.outputs.keyid }} \
@@ -159,7 +170,7 @@ jobs:
                             -Pnexus.password=${{ secrets.OSS_GITHUB_TOKEN }}
 
       - name: Publish Sonatype OSSRH
-        if: needs.context.outputs.isOnMaster == 'true' && needs.context.outputs.isSkipPublish != 'true'
+        if: needs.context.outputs.shouldPublish == 'true'
         run: |
           ./gradlew publish -Psigning.gnupg.homeDir=/home/runner/.gnupg \
                             -Psigning.gnupg.keyName=${{ steps.import_gpg.outputs.keyid }} \
@@ -169,22 +180,34 @@ jobs:
 
   analysis:
     runs-on: ubuntu-latest
+    needs: context
+    if: needs.context.outputs.shouldAnalysis == 'true'
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       - name: Set up JDK 11
         uses: actions/setup-java@v1
         with:
           java-version: 11
 
+      - name: Test
+        run: ./gradlew jacocoRootReport -PjacocoHtml=false
+
       - name: SonarQube
-        if: needs.context.outputs.isSkipPublish != 'true'
         run: ./gradlew sonarqube -Dsonar.login=${{ secrets.OSS_SONARQUBE_TOKEN }} -Dsonar.branch.name=${{ needs.context.outputs.branch }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Cache Gradle packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: ${{ runner.os }}-gradle
+
       - name: Cache SonarCloud packages
-        if: needs.context.outputs.isSkipPublish != 'true'
         uses: actions/cache@v1
         with:
           path: ~/.sonar/cache
@@ -194,7 +217,7 @@ jobs:
   tag:
     runs-on: ubuntu-latest
     needs: context
-    if: needs.context.outputs.isReleasePR == 'true' && github.event.action == 'closed' && github.event.pull_request.merged
+    if: needs.context.outputs.shouldTag == 'true'
     steps:
       - uses: actions/checkout@v2
         with:
