@@ -86,13 +86,11 @@ jobs:
           java-version: 11
 
       - name: SonarQube
-        if: needs.context.outputs.isSkipPublish != 'true'
         run: ./gradlew sonarqube -Dsonar.login=${{ secrets.OSS_SONARQUBE_TOKEN }} -Dsonar.branch.name=${{ needs.context.outputs.branch }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Cache SonarCloud packages
-        if: needs.context.outputs.isSkipPublish != 'true'
         uses: actions/cache@v1
         with:
           path: ~/.sonar/cache
