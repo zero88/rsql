@@ -1,7 +1,16 @@
+import org.gradle.internal.jvm.Jvm
+import org.gradle.util.GradleVersion
+import java.time.Instant
+import java.util.jar.Attributes.Name
+
 plugins {
     base
     `java-library`
+    `maven-publish`
     jacoco
+    signing
+    id("org.sonarqube") version "3.0"
+    id("io.codearte.nexus-staging") version "0.22.0"
 }
 
 allprojects {
@@ -28,7 +37,15 @@ subprojects {
     apply(plugin = "eclipse")
     apply(plugin = "idea")
     apply(plugin = "jacoco")
+    apply(plugin = "signing")
+    apply(plugin = "maven-publish")
     val depVersions: Map<String, String> by ext
+
+    java {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        withJavadocJar()
+        withSourcesJar()
+    }
 
     dependencies {
         compileOnlyApi("com.fasterxml.jackson.core:jackson-annotations:${depVersions["jackson"]}")
@@ -42,17 +59,128 @@ subprojects {
         testAnnotationProcessor("org.projectlombok:lombok:${depVersions["lombok"]}")
     }
 
-    tasks.test {
-        useJUnitPlatform()
+    tasks {
+        jar {
+            manifest {
+                attributes(
+                    mapOf(Name.IMPLEMENTATION_TITLE.toString() to project.name,
+                          Name.IMPLEMENTATION_VERSION.toString() to project.version,
+                          "Created-By" to GradleVersion.current(),
+                          "Build-Jdk" to Jvm.current(),
+                          "Build-By" to project.property("buildBy"),
+                          "Build-Hash" to project.property("buildHash"),
+                          "Build-Date" to Instant.now())
+                )
+            }
+        }
+        javadoc {
+            options {
+                this as StandardJavadocDocletOptions
+                tags = mutableListOf("apiNote:a:API Note:", "implSpec:a:Implementation Requirements:",
+                                     "implNote:a:Implementation Note:")
+            }
+        }
+        test {
+            useJUnitPlatform()
+        }
+    }
+
+    publishing {
+        publications {
+            repositories {
+                create<MavenPublication>("maven") {
+                    groupId = project.group as String?
+                    artifactId = project.name
+                    version = project.version as String?
+                    from(components["java"])
+
+                    versionMapping {
+                        usage("java-api") {
+                            fromResolutionOf("runtimeClasspath")
+                        }
+                        usage("java-runtime") {
+                            fromResolutionResult()
+                        }
+                    }
+                    pom {
+                        name.set(project.name)
+                        description.set("Universal RQL for SQL")
+                        url.set("https://github.com/zero88/universal-rsql")
+                        licenses {
+                            license {
+                                name.set("The Apache License, Version 2.0")
+                                url.set("https://github.com/zero88/universal-rsql/blob/master/LICENSE")
+                            }
+                        }
+                        developers {
+                            developer {
+                                id.set("zero88")
+                                email.set("sontt246@gmail.com")
+                            }
+                        }
+                        scm {
+                            connection.set("scm:git:git://git@github.com:zero88/universal-rsql.git")
+                            developerConnection.set("scm:git:ssh://git@github.com:zero88/universal-rsql.git")
+                            url.set("https://github.com/zero88/universal-rsql")
+                        }
+                    }
+                }
+                maven {
+                    val path = if (project.hasProperty("github")) {
+                        "${project.property("github.nexus.url")}/${project.property("nexus.username")}/${project.name}"
+                    } else {
+                        val releasesRepoUrl = project.property("ossrh.release.url")
+                        val snapshotsRepoUrl = project.property("ossrh.snapshot.url")
+                        if (project.hasProperty("release")) releasesRepoUrl else snapshotsRepoUrl
+                    }
+                    url = path?.let { uri(it) }!!
+                    credentials {
+                        username = project.property("nexus.username") as String?
+                        password = project.property("nexus.password") as String?
+                    }
+                }
+            }
+        }
+    }
+
+    signing {
+        useGpgCmd()
+        sign(publishing.publications["maven"])
     }
 }
 
-dependencies {
-    subprojects.forEach {
-        archives(it)
+task<JacocoReport>("jacocoRootReport") {
+    dependsOn(subprojects.map { it.tasks.withType<Test>() })
+    dependsOn(subprojects.map { it.tasks.withType<JacocoReport>() })
+    additionalSourceDirs.setFrom(subprojects.map { it.sourceSets.main.get().allSource.srcDirs })
+    sourceDirectories.setFrom(subprojects.map { it.sourceSets.main.get().allSource.srcDirs })
+    classDirectories.setFrom(subprojects.map { it.sourceSets.main.get().output })
+    executionData.setFrom(project.fileTree(".") {
+        include("**/build/jacoco/test.exec")
+    })
+    reports {
+        csv.isEnabled = false
+        html.isEnabled = true
+        xml.isEnabled = true
+        html.destination = file("${buildDir}/reports/jacoco/html")
+        xml.destination = file("${buildDir}/reports/jacoco/coverage.xml")
     }
 }
 
-tasks.jacocoTestReport {
-    dependsOn(tasks.test) // tests are required to run before generating the report
+project.tasks["sonarqube"].group = "analysis"
+project.tasks["sonarqube"].dependsOn("build", "jacocoRootReport")
+sonarqube {
+    properties {
+        property("sonar.sourceEncoding", "UTF-8")
+    }
+}
+
+task<Sign>("sign") {
+    dependsOn(subprojects.map { it.tasks.withType<Sign>() })
+}
+
+nexusStaging {
+    packageGroup = project.group as String?
+    username = project.property("nexus.username") as String?
+    password = project.property("nexus.password") as String?
 }
