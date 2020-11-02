@@ -11,4 +11,4 @@ rootProject.name = "universal-rsql"
 include("jpa-ext")
 include("rql")
 include("rql-jooq")
-include("rql-jpa")
+//include("rql-jpa")

@@ -1,9 +1,9 @@
-package io.github.zero.rql;
+package io.github.zero88.rql;
 
 import lombok.NonNull;
 
 /**
- * The interface Query context.
+ * Represents for context when executing query in runtime
  *
  * @since 1.0.0
  */

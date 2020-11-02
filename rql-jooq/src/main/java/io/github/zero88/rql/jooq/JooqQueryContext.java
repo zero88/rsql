@@ -1,6 +1,6 @@
 package io.github.zero88.rql.jooq;
 
-import io.github.zero.rql.QueryContext;
+import io.github.zero88.rql.QueryContext;
 
 import lombok.NonNull;
 

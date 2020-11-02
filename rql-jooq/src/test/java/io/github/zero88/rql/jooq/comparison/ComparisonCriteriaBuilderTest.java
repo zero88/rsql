@@ -7,7 +7,7 @@ import org.jooq.Condition;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import io.github.zero.rql.jooq.Tables;
+import io.github.zero88.rql.jooq.Tables;
 import io.github.zero88.rql.jooq.criteria.JooqCriteriaBuilder;
 import io.github.zero88.rql.jooq.criteria.JooqCriteriaBuilderFactory;
 import io.github.zero88.rql.jooq.criteria.comparison.BetweenBuilder;

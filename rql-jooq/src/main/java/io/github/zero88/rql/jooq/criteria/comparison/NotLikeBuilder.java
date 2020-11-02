@@ -6,8 +6,8 @@ import org.jooq.Condition;
 import org.jooq.Field;
 
 import io.github.zero88.rql.jooq.JooqArgumentParser;
-import io.github.zero.rql.parser.ast.BuiltinComparisonOperator;
 import io.github.zero88.rql.jooq.criteria.JooqComparisonCriteriaBuilder;
+import io.github.zero88.rql.parser.ast.BuiltinComparisonOperator;
 
 import cz.jirutka.rsql.parser.ast.ComparisonNode;
 import cz.jirutka.rsql.parser.ast.ComparisonOperator;

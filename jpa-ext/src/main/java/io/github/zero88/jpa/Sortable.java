@@ -115,7 +115,6 @@ public interface Sortable extends Serializable {
     @Getter
     @Accessors(fluent = true)
     @ToString
-    @FieldNameConstants(level = AccessLevel.PRIVATE)
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
     @JsonSerialize(using = OrderSerializer.class)
     class Order implements Serializable {
@@ -167,8 +166,8 @@ public interface Sortable extends Serializable {
          * @return the order
          * @since 1.0.0
          */
-        public static Order by(@NonNull @JsonProperty(Fields.property) String property,
-                               @JsonProperty(Fields.direction) String direction) {
+        public static Order by(@NonNull @JsonProperty("property") String property,
+                               @JsonProperty("direction") String direction) {
             return by(property, Direction.parse(direction));
         }
 

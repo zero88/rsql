@@ -7,12 +7,12 @@ import org.jooq.Field;
 import org.jooq.TableLike;
 import org.jooq.impl.DSL;
 
-import io.github.zero.rql.criteria.AbstractCriteriaBuilder;
-import io.github.zero.rql.criteria.ComparisonCriteriaBuilder;
-import io.github.zero.rql.parser.ast.ComparisonOperatorProxy;
+import io.github.zero88.rql.criteria.AbstractCriteriaBuilder;
+import io.github.zero88.rql.criteria.ComparisonCriteriaBuilder;
 import io.github.zero88.rql.jooq.JooqArgumentParser;
 import io.github.zero88.rql.jooq.JooqFieldMapper;
 import io.github.zero88.rql.jooq.JooqQueryContext;
+import io.github.zero88.rql.parser.ast.ComparisonOperatorProxy;
 
 import cz.jirutka.rsql.parser.ast.ComparisonNode;
 import lombok.Getter;

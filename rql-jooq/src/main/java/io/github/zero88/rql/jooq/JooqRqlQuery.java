@@ -2,7 +2,7 @@ package io.github.zero88.rql.jooq;
 
 import org.jooq.DSLContext;
 
-import io.github.zero.rql.HasLog;
+import io.github.zero88.rql.HasLog;
 import io.github.zero88.rql.jooq.criteria.JooqCriteriaBuilderFactory;
 import io.github.zero88.rql.jooq.visitor.JooqDSLRqlVisitor;
 

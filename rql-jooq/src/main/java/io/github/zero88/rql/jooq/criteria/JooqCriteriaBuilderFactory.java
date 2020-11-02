@@ -1,8 +1,8 @@
 package io.github.zero88.rql.jooq.criteria;
 
-import io.github.zero.rql.criteria.ComparisonCriteriaBuilder;
-import io.github.zero.rql.criteria.CriteriaBuilder;
-import io.github.zero.rql.criteria.CriteriaBuilderFactory;
+import io.github.zero88.rql.criteria.ComparisonCriteriaBuilder;
+import io.github.zero88.rql.criteria.CriteriaBuilder;
+import io.github.zero88.rql.criteria.CriteriaBuilderFactory;
 import io.github.zero88.rql.jooq.criteria.logical.AndNodeCriteriaBuilder;
 import io.github.zero88.rql.jooq.criteria.logical.OrNodeCriteriaBuilder;
 

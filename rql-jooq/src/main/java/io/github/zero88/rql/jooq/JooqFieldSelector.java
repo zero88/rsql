@@ -8,7 +8,7 @@ import org.jooq.SelectFieldOrAsterisk;
 import org.jooq.TableLike;
 import org.jooq.impl.DSL;
 
-import io.github.zero.rql.FieldSelector;
+import io.github.zero88.rql.FieldSelector;
 
 import lombok.NonNull;
 

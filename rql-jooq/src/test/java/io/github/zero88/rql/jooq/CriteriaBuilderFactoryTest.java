@@ -6,7 +6,6 @@ import java.util.Collections;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import io.github.zero.rql.criteria.ComparisonCriteriaBuilder;
 import io.github.zero88.rql.jooq.criteria.JooqCriteriaBuilder;
 import io.github.zero88.rql.jooq.criteria.JooqCriteriaBuilderFactory;
 import io.github.zero88.rql.jooq.criteria.comparison.EqualBuilder;

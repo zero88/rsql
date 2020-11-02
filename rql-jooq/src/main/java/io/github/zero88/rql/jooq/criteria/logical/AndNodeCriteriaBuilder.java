@@ -4,7 +4,7 @@ import java.util.function.BiFunction;
 
 import org.jooq.Condition;
 
-import io.github.zero.rql.criteria.AbstractCriteriaBuilder;
+import io.github.zero88.rql.criteria.AbstractCriteriaBuilder;
 import io.github.zero88.rql.jooq.criteria.JooqLogicalCriteriaBuilder;
 
 import cz.jirutka.rsql.parser.ast.AndNode;

@@ -1,9 +1,9 @@
-package io.github.zero.rql.criteria;
+package io.github.zero88.rql.criteria;
 
 import java.util.Collections;
 import java.util.Map;
 
-import io.github.zero.rql.parser.ast.ComparisonOperatorProxy;
+import io.github.zero88.rql.parser.ast.ComparisonOperatorProxy;
 import io.github.zero88.utils.Reflections.ReflectionClass;
 import io.github.zero88.utils.Reflections.ReflectionField;
 

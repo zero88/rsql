@@ -1,4 +1,4 @@
-package io.github.zero.rql;
+package io.github.zero88.rql;
 
 import cz.jirutka.rsql.parser.ast.RSQLVisitor;
 
