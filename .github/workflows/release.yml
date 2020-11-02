@@ -45,10 +45,7 @@ jobs:
           java-version: 1.8
 
       - name: Build
-        run: ./gradlew clean build -x test -PbuildBy="GitHub Action" -PbuildHash=${{ github.sha }}
-
-      - name: Test
-        run: ./gradlew jacocoRootReport -PjacocoHtml=false
+        run: ./gradlew clean build -PbuildBy="GitHub Action" -PbuildHash=${{ github.sha }}
 
       - name: Publish GitHub Package
         run: |
@@ -85,6 +82,9 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
+
+      - name: Test
+        run: ./gradlew jacocoRootReport -PjacocoHtml=false
 
       - name: SonarQube
         run: ./gradlew sonarqube -Dsonar.login=${{ secrets.OSS_SONARQUBE_TOKEN }} -Dsonar.branch.name=${{ needs.context.outputs.branch }}

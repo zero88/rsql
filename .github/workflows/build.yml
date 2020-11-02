@@ -113,20 +113,20 @@ jobs:
         run: |
           shouldBuild=${{ steps.checkVersion.outputs.isSameVersion == 'true' && steps.check.outputs.isAfterReleaseMerged == 'false' && (steps.check.outputs.isPR != 'true' || github.event.action != 'closed') }}
           shouldTag=${{ steps.check.outputs.isReleasePR == 'true' && github.event.action == 'closed' && github.event.pull_request.merged }}
-          [[ $shouldBuild == true && "${{ needs.context.outputs.isSkipPublish }}" != 'true' ]] && shouldAnlysis=true || shouldAnlysis=false
-          [[ $shouldAnlysis == true && "${{ needs.context.outputs.isOnMaster }}" == 'true' ]] && shouldPublish=true || shouldPublish=false
+          [[ $shouldBuild == true && "${{ needs.context.outputs.isSkipPublish }}" != 'true' ]] && shouldAnalysis=true || shouldAnalysis=false
+          [[ $shouldAnalysis == true && "${{ needs.context.outputs.isOnMaster }}" == 'true' ]] && shouldPublish=true || shouldPublish=false
 
           echo "Conclusion:"
           echo "- Branch? ${{ steps.check.outputs.branch }}"
           echo "- Version? ${{ steps.checkVersion.outputs.version }}"
           echo "- Semantic version? ${{ steps.checkVersion.outputs.semanticVersion }}"
           echo "- Should build? $shouldBuild"
-          echo "- Should analysis? $shouldAnlysis"
+          echo "- Should analysis? $shouldAnalysis"
           echo "- Should publish? $shouldPublish"
           echo "- Should tag? $shouldTag"
 
           echo ::set-output name=shouldBuild::$shouldBuild
-          echo ::set-output name=shouldAnlysis::$shouldAnlysis
+          echo ::set-output name=shouldAnalysis::$shouldAnalysis
           echo ::set-output name=shouldPublish::$shouldPublish
           echo ::set-output name=shouldTag::$shouldTag
 
@@ -144,20 +144,10 @@ jobs:
 
       - name: Build
         run: |
-          ./gradlew clean build -x test \
+          ./gradlew clean build \
                           -Pversion=${{ needs.context.outputs.version }} \
                           -PsemanticVersion=${{needs.context.outputs.semanticVersion }} \
                           -PbuildBy="GitHub Action" -PbuildHash=${{ github.sha }}
-
-      - name: Test
-        run: ./gradlew jacocoRootReport -PjacocoHtml=false
-
-      - name: Cache Gradle packages
-        uses: actions/cache@v1
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
-          restore-keys: ${{ runner.os }}-gradle
 
       - name: Import GPG key
         id: import_gpg
@@ -202,10 +192,20 @@ jobs:
         with:
           java-version: 11
 
+      - name: Test
+        run: ./gradlew jacocoRootReport -PjacocoHtml=false
+
       - name: SonarQube
         run: ./gradlew sonarqube -Dsonar.login=${{ secrets.OSS_SONARQUBE_TOKEN }} -Dsonar.branch.name=${{ needs.context.outputs.branch }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: ${{ runner.os }}-gradle
 
       - name: Cache SonarCloud packages
         uses: actions/cache@v1
