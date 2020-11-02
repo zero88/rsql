@@ -50,11 +50,6 @@ jobs:
       - name: Test
         run: ./gradlew jacocoRootReport -PjacocoHtml=false
 
-      - name: SonarQube
-        run: ./gradlew sonarqube -Dsonar.login=${{ secrets.OSS_SONARQUBE_TOKEN }} -Dsonar.branch.name=${{ needs.context.outputs.branch }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Publish GitHub Package
         run: |
           ./gradlew publish -Psigning.gnupg.homeDir=/home/runner/.gnupg \
@@ -79,6 +74,31 @@ jobs:
           ./gradlew closeAndReleaseRepository \
                             -Pnexus.username=${{ secrets.OSS_SONATYPE_USER }} \
                             -Pnexus.password=${{ secrets.OSS_SONATYPE_PASSWORD }} || echo 'Need to promote manually'
+
+  analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: SonarQube
+        if: needs.context.outputs.isSkipPublish != 'true'
+        run: ./gradlew sonarqube -Dsonar.login=${{ secrets.OSS_SONARQUBE_TOKEN }} -Dsonar.branch.name=${{ needs.context.outputs.branch }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Cache SonarCloud packages
+        if: needs.context.outputs.isSkipPublish != 'true'
+        uses: actions/cache@v1
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
 
   release:
     runs-on: ubuntu-latest
