@@ -90,57 +90,57 @@ subprojects {
 
     publishing {
         publications {
-            repositories {
-                create<MavenPublication>("maven") {
-                    groupId = project.group as String?
-                    artifactId = project.name
-                    version = project.version as String?
-                    from(components["java"])
+            create<MavenPublication>("maven") {
+                groupId = project.group as String?
+                artifactId = project.name
+                version = project.version as String?
+                from(components["java"])
 
-                    versionMapping {
-                        usage("java-api") {
-                            fromResolutionOf("runtimeClasspath")
-                        }
-                        usage("java-runtime") {
-                            fromResolutionResult()
-                        }
+                versionMapping {
+                    usage("java-api") {
+                        fromResolutionOf("runtimeClasspath")
                     }
-                    pom {
-                        name.set(project.name)
-                        description.set("Universal RQL for SQL")
-                        url.set("https://github.com/zero88/universal-rsql")
-                        licenses {
-                            license {
-                                name.set("The Apache License, Version 2.0")
-                                url.set("https://github.com/zero88/universal-rsql/blob/master/LICENSE")
-                            }
-                        }
-                        developers {
-                            developer {
-                                id.set("zero88")
-                                email.set("sontt246@gmail.com")
-                            }
-                        }
-                        scm {
-                            connection.set("scm:git:git://git@github.com:zero88/universal-rsql.git")
-                            developerConnection.set("scm:git:ssh://git@github.com:zero88/universal-rsql.git")
-                            url.set("https://github.com/zero88/universal-rsql")
-                        }
+                    usage("java-runtime") {
+                        fromResolutionResult()
                     }
                 }
-                maven {
-                    val path = if (project.hasProperty("github")) {
-                        "${project.property("github.nexus.url")}/${project.property("nexus.username")}/${project.name}"
-                    } else {
-                        val releasesRepoUrl = project.property("ossrh.release.url")
-                        val snapshotsRepoUrl = project.property("ossrh.snapshot.url")
-                        if (project.hasProperty("release")) releasesRepoUrl else snapshotsRepoUrl
+                pom {
+                    name.set(project.name)
+                    description.set("Universal RQL for SQL")
+                    url.set("https://github.com/zero88/universal-rsql")
+                    licenses {
+                        license {
+                            name.set("The Apache License, Version 2.0")
+                            url.set("https://github.com/zero88/universal-rsql/blob/master/LICENSE")
+                        }
                     }
-                    url = path?.let { uri(it) }!!
-                    credentials {
-                        username = project.property("nexus.username") as String?
-                        password = project.property("nexus.password") as String?
+                    developers {
+                        developer {
+                            id.set("zero88")
+                            email.set("sontt246@gmail.com")
+                        }
                     }
+                    scm {
+                        connection.set("scm:git:git://git@github.com:zero88/universal-rsql.git")
+                        developerConnection.set("scm:git:ssh://git@github.com:zero88/universal-rsql.git")
+                        url.set("https://github.com/zero88/universal-rsql")
+                    }
+                }
+            }
+        }
+        repositories {
+            maven {
+                val path = if (project.hasProperty("github")) {
+                    "${project.property("github.nexus.url")}/${project.property("nexus.username")}/${rootProject.name}"
+                } else {
+                    val releasesRepoUrl = project.property("ossrh.release.url")
+                    val snapshotsRepoUrl = project.property("ossrh.snapshot.url")
+                    if (project.hasProperty("release")) releasesRepoUrl else snapshotsRepoUrl
+                }
+                url = path?.let { uri(it) }!!
+                credentials {
+                    username = project.property("nexus.username") as String?
+                    password = project.property("nexus.password") as String?
                 }
             }
         }
