@@ -5,6 +5,7 @@ import java.util.Objects;
 
 import org.jooq.Condition;
 import org.jooq.OrderField;
+import org.jooq.Query;
 import org.jooq.Record;
 import org.jooq.SelectConditionStep;
 import org.jooq.SelectLimitStep;
@@ -39,6 +40,11 @@ public final class JooqPagingAndSortingQuery extends AbstractJooqConditionQuery<
         return paging(
             orderBy(dsl().select(queryContext().fieldSelector().get()).from(table()).where(condition), sortable),
             pageable);
+    }
+
+    @Override
+    public @NonNull Query toQuery(@NonNull Condition condition) {
+        return execute(condition);
     }
 
     private SelectSeekStepN<Record> orderBy(@NonNull SelectConditionStep<Record> sql, Sortable sort) {

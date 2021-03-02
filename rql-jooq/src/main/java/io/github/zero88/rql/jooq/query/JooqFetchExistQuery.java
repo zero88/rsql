@@ -1,6 +1,7 @@
 package io.github.zero88.rql.jooq.query;
 
 import org.jooq.Condition;
+import org.jooq.Query;
 import org.jooq.impl.DSL;
 
 import lombok.NonNull;
@@ -18,6 +19,11 @@ public final class JooqFetchExistQuery extends AbstractJooqConditionQuery<Boolea
     @Override
     public Boolean execute(@NonNull Condition condition) {
         return dsl().fetchExists(dsl().select(DSL.asterisk()).from(table()).where(condition));
+    }
+
+    @Override
+    public @NonNull Query toQuery(@NonNull Condition condition) {
+        return dsl().selectOne().whereExists(dsl().select(DSL.asterisk()).from(table()).where(condition));
     }
 
 }

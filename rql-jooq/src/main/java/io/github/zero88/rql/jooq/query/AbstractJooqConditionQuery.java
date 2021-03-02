@@ -1,6 +1,7 @@
 package io.github.zero88.rql.jooq.query;
 
 import org.jooq.Condition;
+import org.jooq.Query;
 import org.jooq.TableLike;
 
 import io.github.zero88.rql.jooq.visitor.DefaultJooqConditionRqlVisitor;
@@ -31,6 +32,11 @@ public abstract class AbstractJooqConditionQuery<R> extends AbstractJooqQuery<R,
 
     public @NonNull R execute(@NonNull String query) {
         return execute(parser().criteria(query, visitor()));
+    }
+
+    @Override
+    public @NonNull Query toQuery(@NonNull String query) {
+        return toQuery(parser().criteria(query, visitor()));
     }
 
 }

@@ -1,6 +1,7 @@
 package io.github.zero88.rql.jooq;
 
 import org.jooq.DSLContext;
+import org.jooq.Query;
 
 import io.github.zero88.rql.HasLog;
 import io.github.zero88.rql.jooq.criteria.JooqCriteriaBuilderFactory;
@@ -47,11 +48,19 @@ public interface JooqRqlQuery<R, T, C> extends JooqRqlFacade, HasLog {
     /**
      * Execute.
      *
-     * @param query the query
-     * @return the r
+     * @param query the query in RQL
+     * @return the result
      * @since 1.0.0
      */
     @NonNull R execute(@NonNull String query);
+
+    /**
+     * To jOOQ query
+     *
+     * @param query the query in RQL
+     * @return jOOQ query
+     */
+    @NonNull Query toQuery(@NonNull String query);
 
     default @NonNull JooqCriteriaBuilderFactory criteriaBuilderFactory() {
         return JooqRqlFacade.super.criteriaBuilderFactory();

@@ -70,7 +70,7 @@ public final class JooqRqlParser {
      * @param query   the query
      * @param visitor the visitor
      * @return the condition
-     * @throws RSQLParserException the rsql parser exception
+     * @throws RSQLParserException the RSQL parser exception
      * @see JooqConditionRqlVisitor
      * @see Condition
      * @since 1.0.0

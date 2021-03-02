@@ -1,6 +1,7 @@
 package io.github.zero88.rql.jooq.query;
 
 import org.jooq.Condition;
+import org.jooq.Query;
 import org.jooq.TableLike;
 
 import io.github.zero88.rql.jooq.JooqRqlQuery;
@@ -35,4 +36,5 @@ public interface JooqConditionQuery<R> extends JooqRqlQuery<R, Condition, Void> 
      */
     @NonNull R execute(@NonNull Condition condition);
 
+    @NonNull Query toQuery(@NonNull Condition condition);
 }
