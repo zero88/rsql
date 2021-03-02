@@ -192,14 +192,6 @@ jobs:
         with:
           java-version: 11
 
-      - name: Test
-        run: ./gradlew jacocoRootReport -PjacocoHtml=false
-
-      - name: SonarQube
-        run: ./gradlew sonarqube -Dsonar.login=${{ secrets.OSS_SONARQUBE_TOKEN }} -Dsonar.branch.name=${{ needs.context.outputs.branch }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Cache Gradle packages
         uses: actions/cache@v1
         with:
@@ -213,6 +205,14 @@ jobs:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
+
+      - name: Test
+        run: ./gradlew jacocoRootReport -PjacocoHtml=false
+
+      - name: SonarQube
+        run: ./gradlew sonarqube -Dsonar.login=${{ secrets.OSS_SONARQUBE_TOKEN }} -Dsonar.branch.name=${{ needs.context.outputs.branch }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   tag:
     runs-on: ubuntu-latest
