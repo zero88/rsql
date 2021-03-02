@@ -35,11 +35,11 @@ public interface JooqArgumentParser extends ArgumentParser {
      * @since 1.0.0
      */
     default Object parse(@NonNull Field field, String value) {
-        if (!DateTimes.isRelatedToDateTime(field.getDataType().getType())) {
-            return value;
-        }
         if (Strings.isBlank(value)) {
             return null;
+        }
+        if (!DateTimes.isRelatedToDateTime(field.getDataType().getType())) {
+            return value;
         }
         return Optional.ofNullable(field.getDataType().convert(value))
                        .orElseGet(() -> Iso8601Parser.parse(field.getDataType().getType(), value));

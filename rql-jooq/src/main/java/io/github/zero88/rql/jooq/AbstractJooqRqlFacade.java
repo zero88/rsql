@@ -27,7 +27,4 @@ public abstract class AbstractJooqRqlFacade implements JooqRqlFacade {
         return Optional.ofNullable(criteriaBuilderFactory).orElseGet(JooqRqlFacade.super::criteriaBuilderFactory);
     }
 
-    public static abstract class AbstractJooqRqlFacadeBuilder<C extends AbstractJooqRqlFacade,
-                                                                 B extends AbstractJooqRqlFacadeBuilder<C, B>> {}
-
 }
