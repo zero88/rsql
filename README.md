@@ -5,10 +5,10 @@
 ![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/io.github.zero88/rql-jooq?server=https%3A%2F%2Foss.sonatype.org%2F)
 ![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/io.github.zero88/rql-jooq*?server=https%3A%2F%2Foss.sonatype.org%2F)
 
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=zero88_universal-rsql&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=zero88_universal-rsql)
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=zero88_universal-rsql&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=zero88_universal-rsql)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=zero88_universal-rsql&metric=security_rating)](https://sonarcloud.io/dashboard?id=zero88_universal-rsql)
-[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=zero88_universal-rsql&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=zero88_universal-rsql)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=zero88_universal-rsql&metric=coverage)](https://sonarcloud.io/dashboard?id=zero88_universal-rsql)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=zero88_rsql&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=zero88_rsql)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=zero88_rsql&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=zero88_rsql)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=zero88_rsql&metric=security_rating)](https://sonarcloud.io/dashboard?id=zero88_rsql)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=zero88_rsql&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=zero88_rsql)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=zero88_rsql&metric=coverage)](https://sonarcloud.io/dashboard?id=zero88_rsql)
 
-## Overview
+## Usage
