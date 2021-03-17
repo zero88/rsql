@@ -60,7 +60,7 @@ subprojects {
                 url.set("https://github.com/zero88/rsql/blob/master/LICENSE")
             }
             scm {
-                connection.set("scm:git:git://git@github.com:zero88/jooqx.git")
+                connection.set("scm:git:git://git@github.com:zero88/rsql.git")
                 developerConnection.set("scm:git:ssh://git@github.com:zero88/rsql.git")
                 url.set("https://github.com/zero88/rsql")
             }

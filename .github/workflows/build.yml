@@ -2,7 +2,7 @@ name: build-release
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, master ]
     tags: [ 'v*' ]
     paths-ignore:
       - '.github/ISSUE_TEMPLATE/**'
