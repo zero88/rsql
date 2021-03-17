@@ -25,8 +25,10 @@ public class CriteriaBuilderTest {
                                                           Collections.singletonList("true"));
         final AndNode node = new AndNode(Arrays.asList(eqNode1, eqNode2));
         final Condition condition = JooqCriteriaBuilderFactory.DEFAULT.create(node).build(Tables.ALL_DATA_TYPE);
+        System.out.println(node.toString());
+        System.out.println(condition.toString());
         Assertions.assertEquals(
-            "( 1 = 1 and \"ALL_DATA_TYPE\".\"F_STR\" = 'abc' and \"ALL_DATA_TYPE\".\"F_BOOL\" = true )",
+            "( \"ALL_DATA_TYPE\".\"F_STR\" = 'abc' and \"ALL_DATA_TYPE\".\"F_BOOL\" = true )",
             Strings.optimizeMultipleSpace(condition.toString()));
     }
 
@@ -39,8 +41,10 @@ public class CriteriaBuilderTest {
                                                           Collections.singletonList("xyz"));
         final OrNode node = new OrNode(Arrays.asList(eqNode1, eqNode2));
         final Condition condition = JooqCriteriaBuilderFactory.DEFAULT.create(node).build(Tables.ALL_DATA_TYPE);
+        System.out.println(node.toString());
+        System.out.println(condition.toString());
         Assertions.assertEquals(
-            "( ( 1 = 1 and \"ALL_DATA_TYPE\".\"F_DURATION\" = 'abc' ) or \"ALL_DATA_TYPE\".\"F_PERIOD\" = 'xyz' )",
+            "( \"ALL_DATA_TYPE\".\"F_DURATION\" = 'abc' or \"ALL_DATA_TYPE\".\"F_PERIOD\" = 'xyz' )",
             Strings.optimizeMultipleSpace(condition.toString()));
     }
 
@@ -58,9 +62,11 @@ public class CriteriaBuilderTest {
         final OrNode orNode = new OrNode(Arrays.asList(eqNode3, eqNode4));
         final AndNode node = new AndNode(Arrays.asList(eqNode1, eqNode2, orNode));
         final Condition condition = JooqCriteriaBuilderFactory.DEFAULT.create(node).build(Tables.ALL_DATA_TYPE);
+        System.out.println(node.toString());
+        System.out.println(condition.toString());
         Assertions.assertEquals(
-            "( 1 = 1 and \"ALL_DATA_TYPE\".\"F_STR\" = 'abc' and \"ALL_DATA_TYPE\".\"F_BOOL\" = true and " +
-            "( ( 1 = 1 and \"ALL_DATA_TYPE\".\"F_DURATION\" = 'def' ) or \"ALL_DATA_TYPE\".\"F_PERIOD\" = 'xyz' ) )",
+            "( \"ALL_DATA_TYPE\".\"F_STR\" = 'abc' and \"ALL_DATA_TYPE\".\"F_BOOL\" = true and ( \"ALL_DATA_TYPE\"" +
+            ".\"F_DURATION\" = 'def' or \"ALL_DATA_TYPE\".\"F_PERIOD\" = 'xyz' ) )",
             Strings.optimizeMultipleSpace(condition.toString()));
     }
 

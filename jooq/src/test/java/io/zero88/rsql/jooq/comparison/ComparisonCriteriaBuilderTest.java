@@ -121,6 +121,8 @@ public class ComparisonCriteriaBuilderTest {
         final JooqCriteriaBuilder builder = JooqCriteriaBuilderFactory.DEFAULT.create(node);
         Assertions.assertTrue(builder instanceof BetweenBuilder);
         final Condition condition = builder.build(Tables.ALL_DATA_TYPE);
+        System.out.println(node.toString());
+        System.out.println(condition.toString());
         Assertions.assertEquals(
             "\"ALL_DATA_TYPE\".\"F_DATE\" between timestamp '2020-04-05 08:00:00.0' and timestamp " +
             "'2020-04-08 08:00:00.0'", Strings.optimizeMultipleSpace(condition.toString()));
@@ -133,6 +135,8 @@ public class ComparisonCriteriaBuilderTest {
         final JooqCriteriaBuilder builder = JooqCriteriaBuilderFactory.DEFAULT.create(node);
         Assertions.assertTrue(builder instanceof ExistsBuilder);
         final Condition condition = builder.build(Tables.ALL_DATA_TYPE);
+        System.out.println(node.toString());
+        System.out.println(condition.toString());
         Assertions.assertEquals("\"ALL_DATA_TYPE\".\"F_PERIOD\" is not null",
                             Strings.optimizeMultipleSpace(condition.toString()));
     }

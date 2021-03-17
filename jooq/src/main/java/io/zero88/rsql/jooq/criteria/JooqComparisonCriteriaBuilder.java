@@ -44,7 +44,7 @@ public abstract class JooqComparisonCriteriaBuilder extends AbstractCriteriaBuil
         final JooqArgumentParser parser = queryContext.argumentParser();
         return fieldMapper.get(table, node().getSelector())
                           .map(f -> compare(f, node().getArguments(), parser))
-                          .orElse(DSL.trueCondition());
+                          .orElse(DSL.noCondition());
     }
 
     protected abstract @NonNull Condition compare(@NonNull Field field, @NonNull List<String> arguments,

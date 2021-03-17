@@ -17,7 +17,7 @@ public interface JooqLogicalCriteriaBuilder<T extends LogicalNode> extends JooqC
     @Override
     default @NonNull Condition build(@NonNull TableLike table, @NonNull JooqQueryContext queryContext,
                                      @NonNull JooqCriteriaBuilderFactory factory) {
-        final Condition[] condition = new Condition[] {DSL.trueCondition()};
+        final Condition[] condition = new Condition[] {DSL.noCondition()};
         boolean isFirst = true;
         for (Node node : node()) {
             if (isFirst) {
