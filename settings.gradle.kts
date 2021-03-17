@@ -7,8 +7,8 @@
  * in the user manual at https://docs.gradle.org/6.7/userguide/multi_project_builds.html
  */
 
-rootProject.name = "universal-rsql"
-include("jpa-ext")
-include("rql")
-include("rql-jooq")
-//include("rql-jpa")
+rootProject.name = "rsql"
+include("ext")
+include("core")
+include("jooq")
+//include("jpa")
