@@ -25,7 +25,7 @@ public final class LikeBuilder extends JooqComparisonCriteriaBuilder {
     @Override
     protected @NonNull Condition compare(@NonNull Field field, @NonNull List<String> arguments,
                                          @NonNull JooqArgumentParser parser) {
-        throw new UnsupportedOperationException("Not yet implemented");
+      return  field.like((String) parser.parse(field, arguments.get(0)));
     }
 
 }

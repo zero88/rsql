@@ -3,6 +3,8 @@ package io.zero88.rsql.jooq.comparison;
 import java.util.Arrays;
 import java.util.Collections;
 
+import io.zero88.rsql.jooq.criteria.comparison.LikeBuilder;
+import io.zero88.rsql.jooq.criteria.comparison.NotLikeBuilder;
 import org.jooq.Condition;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -163,6 +165,28 @@ public class ComparisonCriteriaBuilderTest {
         final Condition condition = builder.build(Tables.ALL_DATA_TYPE);
         Assertions.assertEquals("( \"ALL_DATA_TYPE\".\"F_VALUE_JSON\" is null or \"ALL_DATA_TYPE\"" +
                             ".\"F_VALUE_JSON\" = 't' )", Strings.optimizeMultipleSpace(condition.toString()));
+    }
+
+    @Test
+    public void test_like_node() {
+        final ComparisonNode node = new ComparisonNode(LikeBuilder.OPERATOR,
+                Tables.ALL_DATA_TYPE.F_STR.getName(),
+                Collections.singletonList("test"));
+        final JooqCriteriaBuilder builder = JooqCriteriaBuilderFactory.DEFAULT.create(node);
+        Assertions.assertTrue(builder instanceof LikeBuilder);
+        final Condition condition = builder.build(Tables.ALL_DATA_TYPE);
+        Assertions.assertEquals("\"ALL_DATA_TYPE\".\"F_STR\" like 'test'", Strings.optimizeMultipleSpace(condition.toString()));
+    }
+
+    @Test
+    public void test_notLike_node() {
+        final ComparisonNode node = new ComparisonNode(NotLikeBuilder.OPERATOR,
+                Tables.ALL_DATA_TYPE.F_STR.getName(),
+                Collections.singletonList("test%"));
+        final JooqCriteriaBuilder builder = JooqCriteriaBuilderFactory.DEFAULT.create(node);
+        Assertions.assertTrue(builder instanceof NotLikeBuilder);
+        final Condition condition = builder.build(Tables.ALL_DATA_TYPE);
+        Assertions.assertEquals("\"ALL_DATA_TYPE\".\"F_STR\" not like 'test%'", Strings.optimizeMultipleSpace(condition.toString()));
     }
 
 }
