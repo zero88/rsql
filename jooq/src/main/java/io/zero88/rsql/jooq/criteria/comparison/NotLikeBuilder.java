@@ -13,7 +13,7 @@ import cz.jirutka.rsql.parser.ast.ComparisonNode;
 import cz.jirutka.rsql.parser.ast.ComparisonOperator;
 import lombok.NonNull;
 
-//TODO implement it
+
 public final class NotLikeBuilder extends JooqComparisonCriteriaBuilder {
 
     public static final ComparisonOperator OPERATOR = BuiltinComparisonOperator.NOT_LIKE;
@@ -25,7 +25,7 @@ public final class NotLikeBuilder extends JooqComparisonCriteriaBuilder {
     @Override
     protected @NonNull Condition compare(@NonNull Field field, @NonNull List<String> arguments,
                                          @NonNull JooqArgumentParser parser) {
-        throw new UnsupportedOperationException("Not yet implemented");
+        return  field.notLike((String) parser.parse(field, arguments.get(0)));
     }
 
 }
