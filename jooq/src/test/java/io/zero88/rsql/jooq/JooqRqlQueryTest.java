@@ -21,7 +21,7 @@ public class JooqRqlQueryTest {
 
     @BeforeEach
     public void before() {
-        dsl = DSL.using("jdbc:h2:mem:dbh2mem-" + UUID.randomUUID().toString());
+        dsl = DSL.using("jdbc:h2:mem:dbh2mem-" + UUID.randomUUID());
         jooqRqlParser = JooqRqlParser.DEFAULT;
     }
 

@@ -1,13 +1,13 @@
 package io.zero88.rsql.parser.ast;
 
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.Arrays;
+import java.util.Objects;
 
-import io.github.zero88.repl.ReflectionField;
+import io.github.zero88.utils.Strings;
+import io.zero88.rsql.criteria.ComparisonCriteriaBuilderLoader;
 
 import cz.jirutka.rsql.parser.ast.ComparisonOperator;
 import cz.jirutka.rsql.parser.ast.RSQLOperators;
-import lombok.NonNull;
 
 /**
  * The interface Comparison operator proxy.
@@ -17,70 +17,108 @@ import lombok.NonNull;
  * @see ComparisonOperator
  * @since 1.0.0
  */
-@FunctionalInterface
-public interface ComparisonOperatorProxy {
+public final class ComparisonOperatorProxy {
 
     /**
      * The constant EQUAL.
      */
-    ComparisonOperatorProxy EQUAL = () -> RSQLOperators.EQUAL;
+    public static final ComparisonOperatorProxy EQUAL = ComparisonOperatorProxy.wrap(RSQLOperators.EQUAL);
     /**
      * The constant NOT_EQUAL.
      */
-    ComparisonOperatorProxy NOT_EQUAL = () -> RSQLOperators.NOT_EQUAL;
+    public static final ComparisonOperatorProxy NOT_EQUAL = ComparisonOperatorProxy.wrap(RSQLOperators.NOT_EQUAL);
     /**
      * The constant GREATER_THAN.
      */
-    ComparisonOperatorProxy GREATER_THAN = () -> RSQLOperators.GREATER_THAN;
+    public static final ComparisonOperatorProxy GREATER_THAN = ComparisonOperatorProxy.wrap(RSQLOperators.GREATER_THAN);
     /**
      * The constant GREATER_THAN_OR_EQUAL.
      */
-    ComparisonOperatorProxy GREATER_THAN_OR_EQUAL = () -> RSQLOperators.GREATER_THAN_OR_EQUAL;
+    // @formatter:off
+    public static final ComparisonOperatorProxy GREATER_THAN_OR_EQUAL = ComparisonOperatorProxy.wrap(RSQLOperators.GREATER_THAN_OR_EQUAL);
+    // @formatter:on
     /**
      * The constant LESS_THAN.
      */
-    ComparisonOperatorProxy LESS_THAN = () -> RSQLOperators.LESS_THAN;
+    public static final ComparisonOperatorProxy LESS_THAN = ComparisonOperatorProxy.wrap(RSQLOperators.LESS_THAN);
     /**
      * The constant LESS_THAN_OR_EQUAL.
      */
-    ComparisonOperatorProxy LESS_THAN_OR_EQUAL = () -> RSQLOperators.LESS_THAN_OR_EQUAL;
+    // @formatter:off
+    public static final ComparisonOperatorProxy LESS_THAN_OR_EQUAL = ComparisonOperatorProxy.wrap(RSQLOperators.LESS_THAN_OR_EQUAL);
+    // @formatter:on
     /**
      * The constant IN.
      */
-    ComparisonOperatorProxy IN = () -> RSQLOperators.IN;
+    public static final ComparisonOperatorProxy IN = ComparisonOperatorProxy.wrap(RSQLOperators.IN);
     /**
      * The constant NOT_IN.
      */
-    ComparisonOperatorProxy NOT_IN = () -> RSQLOperators.NOT_IN;
+    public static final ComparisonOperatorProxy NOT_IN = ComparisonOperatorProxy.wrap(RSQLOperators.NOT_IN);
     /**
      * The constant BETWEEN.
      */
-    ComparisonOperatorProxy BETWEEN = () -> new ComparisonOperator("=between=", true);
+    public static final ComparisonOperatorProxy BETWEEN = ComparisonOperatorProxy.multiValue("=between=");
     /**
      * The constant EXISTS.
      */
-    ComparisonOperatorProxy EXISTS = () -> new ComparisonOperator("=exists=", "=nn=");
+    public static final ComparisonOperatorProxy EXISTS = ComparisonOperatorProxy.create("=exists=", "=nn=");
     /**
      * The constant NON_EXISTS.
      */
-    ComparisonOperatorProxy NON_EXISTS = () -> new ComparisonOperator("=null=", "=isn=");
+    public static final ComparisonOperatorProxy NON_EXISTS = ComparisonOperatorProxy.create("=null=", "=isn=");
     /**
      * The constant NULLABLE.
      */
-    ComparisonOperatorProxy NULLABLE = () -> new ComparisonOperator("=nullable=");
-
-    ComparisonOperatorProxy LIKE = () -> new ComparisonOperator("=like=");
-
-    ComparisonOperatorProxy NOT_LIKE = () -> new ComparisonOperator("=nk=", "=unlike=");
-
+    public static final ComparisonOperatorProxy NULLABLE = ComparisonOperatorProxy.create("=nullable=");
     /**
-     * Get set of default comparison operators.
-     *
-     * @return the default comparison operators
-     * @since 1.0.0
+     * The constant LIKE
      */
-    static Set<ComparisonOperatorProxy> operators() {
-        return ReflectionField.streamConstants(ComparisonOperatorProxy.class).collect(Collectors.toSet());
+    public static final ComparisonOperatorProxy LIKE = ComparisonOperatorProxy.create("=like=");
+    /**
+     * The constant NOT_LIKE
+     */
+    public static final ComparisonOperatorProxy NOT_LIKE = ComparisonOperatorProxy.create("=nk=", "=unlike=");
+
+    private final ComparisonOperator operator;
+    private final String[] symbols;
+
+    private ComparisonOperatorProxy(ComparisonOperator operator) {
+        this.operator = operator;
+        this.symbols = null;
+    }
+
+    private ComparisonOperatorProxy(boolean multiValue, String... symbols) {
+        this.symbols = Arrays.stream(symbols).filter(Strings::isNotBlank).toArray(String[]::new);
+        String[] originSymbols = Arrays.stream(this.symbols)
+                                       .filter(s -> ComparisonCriteriaBuilderLoader.SYMBOL_PATTERN.matcher(s).matches())
+                                       .toArray(String[]::new);
+        if (this.symbols.length == 0 || originSymbols.length == 0) {
+            throw new IllegalArgumentException(
+                "Missing Comparison operator or at least one of the symbols must match " +
+                ComparisonCriteriaBuilderLoader.SYMBOL_PATTERN);
+        }
+        this.operator = new ComparisonOperator(originSymbols, multiValue);
+    }
+
+    public static ComparisonOperatorProxy wrap(ComparisonOperator operator) {
+        return new ComparisonOperatorProxy(operator);
+    }
+
+    public static ComparisonOperatorProxy create(String symbol) {
+        return new ComparisonOperatorProxy(false, symbol);
+    }
+
+    public static ComparisonOperatorProxy create(String... symbols) {
+        return new ComparisonOperatorProxy(false, symbols);
+    }
+
+    public static ComparisonOperatorProxy multiValue(String symbol) {
+        return new ComparisonOperatorProxy(true, symbol);
+    }
+
+    public static ComparisonOperatorProxy multiValue(String... symbols) {
+        return new ComparisonOperatorProxy(true, symbols);
     }
 
     /**
@@ -90,6 +128,29 @@ public interface ComparisonOperatorProxy {
      * @see ComparisonOperator
      * @since 1.0.0
      */
-    @NonNull ComparisonOperator operator();
+    public ComparisonOperator operator() {
+        return operator;
+    }
+
+    public String[] getSymbols() {
+        return Objects.isNull(symbols) ? operator.getSymbols() : symbols;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        ComparisonOperatorProxy that = (ComparisonOperatorProxy) o;
+        return operator.equals(that.operator);
+    }
+
+    @Override
+    public int hashCode() {
+        return operator.hashCode();
+    }
 
 }
