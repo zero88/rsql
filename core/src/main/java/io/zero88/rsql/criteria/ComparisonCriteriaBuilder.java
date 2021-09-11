@@ -1,11 +1,10 @@
 package io.zero88.rsql.criteria;
 
-import java.util.Collections;
-import java.util.Map;
-
+import io.github.zero88.repl.Arguments;
+import io.github.zero88.repl.ReflectionClass;
+import io.github.zero88.repl.ReflectionElement;
+import io.github.zero88.repl.ReflectionField;
 import io.zero88.rsql.parser.ast.ComparisonOperatorProxy;
-import io.github.zero88.utils.Reflections.ReflectionClass;
-import io.github.zero88.utils.Reflections.ReflectionField;
 
 import cz.jirutka.rsql.parser.ast.ComparisonNode;
 import cz.jirutka.rsql.parser.ast.ComparisonOperator;
@@ -51,8 +50,8 @@ public interface ComparisonCriteriaBuilder<T extends ComparisonOperatorProxy> ex
                                                                                    @NonNull Class<B> parentClass,
                                                                                    @NonNull String packageName) {
         final ComparisonOperator operator = node.getOperator();
-        final Map<Class, Object> input = Collections.singletonMap(ComparisonNode.class, node);
-        return ReflectionClass.stream(packageName, parentClass, ReflectionClass.publicClass())
+        final Arguments input = new Arguments().put(ComparisonNode.class, node);
+        return ReflectionClass.stream(packageName, parentClass, ReflectionElement.isPublicClass())
                               .filter(clazz -> operator.equals(ReflectionField.constantByName(clazz, "OPERATOR")))
                               .map(clazz -> ReflectionClass.createObject(clazz, input))
                               .findFirst()

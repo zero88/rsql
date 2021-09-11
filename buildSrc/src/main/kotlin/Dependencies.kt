@@ -14,11 +14,11 @@ object PluginLibs {
 
     object Version {
 
-        const val nexusStaging = "0.22.0"
         const val jooq = "5.2"
+        const val nexusPublish = "1.1.0"
     }
 
-    const val nexusStaging = "io.codearte.nexus-staging"
+    const val nexusPublish = "io.github.gradle-nexus.publish-plugin"
     const val jooq = "nu.studer.jooq"
 }
 
@@ -105,15 +105,15 @@ object DatabaseLibs {
 object ZeroLibs {
     object Version {
 
-        const val utils = "1.0.1"
-        const val plugin = "1.0.0"
+        const val utils = "2.0.0-SNAPSHOT"
+        const val plugin = "2.0.0"
     }
 
     const val utils = "io.github.zero88:java-utils:${Version.utils}"
 
     object Plugins {
 
-        const val oss = "io.github.zero88.qwe.gradle.oss"
-        const val root = "io.github.zero88.qwe.gradle.root"
+        const val oss = "io.github.zero88.gradle.oss"
+        const val root = "io.github.zero88.gradle.root"
     }
 }

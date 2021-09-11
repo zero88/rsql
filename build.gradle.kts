@@ -1,10 +1,10 @@
 plugins {
     eclipse
     idea
-    id(PluginLibs.nexusStaging) version PluginLibs.Version.nexusStaging
-    id(PluginLibs.jooq) version PluginLibs.Version.jooq apply false
     id(ZeroLibs.Plugins.oss) version ZeroLibs.Version.plugin
     id(ZeroLibs.Plugins.root) version ZeroLibs.Version.plugin apply false
+    id(PluginLibs.jooq) version PluginLibs.Version.jooq apply false
+    id(PluginLibs.nexusPublish) version PluginLibs.Version.nexusPublish
 }
 
 apply(plugin = ZeroLibs.Plugins.root)
@@ -14,10 +14,10 @@ allprojects {
 
     repositories {
         mavenLocal()
-        maven { url = uri("https://oss.sonatype.org/content/groups/public/") }
-        maven { url = uri("https://maven.pkg.github.com/zero88/java-utils") }
-        mavenCentral()
+        maven { url = uri("https://maven-central-asia.storage-download.googleapis.com/maven2/") }
         jcenter()
+        maven { url = uri("https://oss.sonatype.org/content/groups/public/") }
+        mavenCentral()
     }
 }
 
@@ -50,7 +50,7 @@ subprojects {
         testAnnotationProcessor(UtilLibs.lombok)
     }
 
-    qwe {
+    oss {
         zero88.set(true)
         publishingInfo {
             enabled.set(true)
@@ -68,10 +68,14 @@ subprojects {
     }
 }
 
-nexusStaging {
-    packageGroup = project.group as String?
-    username = project.property("nexus.username") as String?
-    password = project.property("nexus.password") as String?
+nexusPublishing {
+    packageGroup.set("io.github.zero88")
+    repositories {
+        sonatype {
+            username.set(project.property("nexus.username") as String?)
+            password.set(project.property("nexus.password") as String?)
+        }
+    }
 }
 
 tasks.register("generateJooq") {

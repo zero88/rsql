@@ -3,7 +3,7 @@ package io.zero88.rsql.parser.ast;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import io.github.zero88.utils.Reflections.ReflectionField;
+import io.github.zero88.repl.ReflectionField;
 
 import cz.jirutka.rsql.parser.ast.ComparisonOperator;
 import cz.jirutka.rsql.parser.ast.RSQLOperators;
