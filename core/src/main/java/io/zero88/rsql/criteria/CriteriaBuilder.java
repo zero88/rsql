@@ -6,9 +6,10 @@ import lombok.NonNull;
 public interface CriteriaBuilder<T extends Node> {
 
     /**
-     * Defines Node.
+     * Represents for current AST node.
      *
-     * @return the node
+     * @return the AST node
+     * @see Node
      * @since 1.0.0
      */
     @NonNull T node();

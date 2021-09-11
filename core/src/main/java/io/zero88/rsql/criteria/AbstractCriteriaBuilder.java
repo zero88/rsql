@@ -1,17 +1,19 @@
 package io.zero88.rsql.criteria;
 
 import cz.jirutka.rsql.parser.ast.Node;
-import lombok.Getter;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.Accessors;
 
-@Getter
-@Accessors(fluent = true)
-@RequiredArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class AbstractCriteriaBuilder<T extends Node> implements CriteriaBuilder<T> {
 
-    @NonNull
-    private final T node;
+    protected T node;
+
+    public final @NonNull T node() {
+        return node;
+    }
 
 }

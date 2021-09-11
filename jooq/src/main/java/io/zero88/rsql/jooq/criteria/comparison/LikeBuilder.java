@@ -7,19 +7,16 @@ import org.jooq.Field;
 
 import io.zero88.rsql.jooq.JooqArgumentParser;
 import io.zero88.rsql.jooq.criteria.JooqComparisonCriteriaBuilder;
-import io.zero88.rsql.parser.ast.BuiltinComparisonOperator;
+import io.zero88.rsql.parser.ast.ComparisonOperatorProxy;
 
-import cz.jirutka.rsql.parser.ast.ComparisonNode;
-import cz.jirutka.rsql.parser.ast.ComparisonOperator;
 import lombok.NonNull;
 
 //TODO implement it
 public final class LikeBuilder extends JooqComparisonCriteriaBuilder {
 
-    public static final ComparisonOperator OPERATOR = BuiltinComparisonOperator.LIKE;
-
-    protected LikeBuilder(@NonNull ComparisonNode node) {
-        super(node);
+    @Override
+    public @NonNull ComparisonOperatorProxy operator() {
+        return ComparisonOperatorProxy.LIKE;
     }
 
     @Override

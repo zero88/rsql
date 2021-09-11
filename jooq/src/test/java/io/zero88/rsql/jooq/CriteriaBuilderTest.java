@@ -7,8 +7,8 @@ import org.jooq.Condition;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import io.zero88.rsql.jooq.criteria.JooqCriteriaBuilderFactory;
 import io.github.zero88.utils.Strings;
+import io.zero88.rsql.jooq.criteria.JooqCriteriaBuilderFactory;
 
 import cz.jirutka.rsql.parser.ast.AndNode;
 import cz.jirutka.rsql.parser.ast.ComparisonNode;
@@ -25,11 +25,10 @@ public class CriteriaBuilderTest {
                                                           Collections.singletonList("true"));
         final AndNode node = new AndNode(Arrays.asList(eqNode1, eqNode2));
         final Condition condition = JooqCriteriaBuilderFactory.DEFAULT.create(node).build(Tables.ALL_DATA_TYPE);
-        System.out.println(node.toString());
-        System.out.println(condition.toString());
-        Assertions.assertEquals(
-            "( \"ALL_DATA_TYPE\".\"F_STR\" = 'abc' and \"ALL_DATA_TYPE\".\"F_BOOL\" = true )",
-            Strings.optimizeMultipleSpace(condition.toString()));
+        System.out.println(node);
+        System.out.println(condition);
+        Assertions.assertEquals("( \"ALL_DATA_TYPE\".\"F_STR\" = 'abc' and \"ALL_DATA_TYPE\".\"F_BOOL\" = true )",
+                                Strings.optimizeMultipleSpace(condition.toString()));
     }
 
     @Test
@@ -41,8 +40,8 @@ public class CriteriaBuilderTest {
                                                           Collections.singletonList("xyz"));
         final OrNode node = new OrNode(Arrays.asList(eqNode1, eqNode2));
         final Condition condition = JooqCriteriaBuilderFactory.DEFAULT.create(node).build(Tables.ALL_DATA_TYPE);
-        System.out.println(node.toString());
-        System.out.println(condition.toString());
+        System.out.println(node);
+        System.out.println(condition);
         Assertions.assertEquals(
             "( \"ALL_DATA_TYPE\".\"F_DURATION\" = 'abc' or \"ALL_DATA_TYPE\".\"F_PERIOD\" = 'xyz' )",
             Strings.optimizeMultipleSpace(condition.toString()));
@@ -62,8 +61,8 @@ public class CriteriaBuilderTest {
         final OrNode orNode = new OrNode(Arrays.asList(eqNode3, eqNode4));
         final AndNode node = new AndNode(Arrays.asList(eqNode1, eqNode2, orNode));
         final Condition condition = JooqCriteriaBuilderFactory.DEFAULT.create(node).build(Tables.ALL_DATA_TYPE);
-        System.out.println(node.toString());
-        System.out.println(condition.toString());
+        System.out.println(node);
+        System.out.println(condition);
         Assertions.assertEquals(
             "( \"ALL_DATA_TYPE\".\"F_STR\" = 'abc' and \"ALL_DATA_TYPE\".\"F_BOOL\" = true and ( \"ALL_DATA_TYPE\"" +
             ".\"F_DURATION\" = 'def' or \"ALL_DATA_TYPE\".\"F_PERIOD\" = 'xyz' ) )",

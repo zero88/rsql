@@ -7,18 +7,15 @@ import org.jooq.Field;
 
 import io.zero88.rsql.jooq.JooqArgumentParser;
 import io.zero88.rsql.jooq.criteria.JooqComparisonCriteriaBuilder;
+import io.zero88.rsql.parser.ast.ComparisonOperatorProxy;
 
-import cz.jirutka.rsql.parser.ast.ComparisonNode;
-import cz.jirutka.rsql.parser.ast.ComparisonOperator;
-import cz.jirutka.rsql.parser.ast.RSQLOperators;
 import lombok.NonNull;
 
 public final class NotEqualBuilder extends JooqComparisonCriteriaBuilder {
 
-    public static final ComparisonOperator OPERATOR = RSQLOperators.NOT_EQUAL;
-
-    public NotEqualBuilder(@NonNull ComparisonNode node) {
-        super(node);
+    @Override
+    public @NonNull ComparisonOperatorProxy operator() {
+        return ComparisonOperatorProxy.NOT_EQUAL;
     }
 
     @Override

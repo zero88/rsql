@@ -11,7 +11,7 @@ on:
       - 'LICENSE'
   pull_request:
     types: [ opened, synchronize, reopened, closed ]
-    branches: [ main ]
+    branches: [ master ]
 
 env:
   ENABLE_TEST: true
@@ -26,6 +26,7 @@ jobs:
       shouldPublish: ${{ steps.context.outputs.decision_publish }}
       isRelease: ${{ steps.context.outputs.isTag }}
       version: ${{ steps.context.outputs.version }}
+      commitId: ${{ steps.context.outputs.shortCommitId }}
       semanticVersion: ${{ steps.semantic.outputs.semanticVersion }}
 
     steps:
@@ -45,25 +46,16 @@ jobs:
 
       - name: Project context
         id: context
-        uses: zero88/gh-project-context@v1
+        uses: zero88/gh-project-context@v1.1
         with:
-          dry: false
           mustSign: true
+          nextVerMode: PATCH
 
       - name: Find semantic version
         id: semantic
         shell: bash
         run: |
           [[ "${{ steps.context.outputs.isTag }}" == "true" ]] && sv="" || sv=$(grep semanticVersion gradle.properties | cut -d'=' -f2)
-
-      - name: Increase minor version if need
-        if: steps.context.outputs.isAfterMergedReleasePR == 'true'
-        run: |
-          sed -i -e "s/version=.*/version=${{ steps.context.outputs.ver_nextPath }}/g" gradle.properties
-          sed -i -e "s/semanticVersion=.*/semanticVersion=-SNAPSHOT/g" gradle.properties
-          git commit -S -am "<ci-auto-commit> Increase minor version"
-          git show --shortstat --show-signature
-          git push
 
   build:
     runs-on: ubuntu-latest
@@ -113,14 +105,12 @@ jobs:
           ./gradlew publish "${args[@]}"
 
       - name: Publish Sonatype OSSRH
-        if: needs.context.outputs.shouldPublish == 'true'
+        if: needs.context.outputs.shouldPublish == 'true' && needs.context.outputs.isRelease != 'true'
         run: |
-          args=( -Psigning.gnupg.homeDir=/home/runner/.gnupg \
-                           -Psigning.gnupg.keyName=${{ steps.import_gpg.outputs.keyid }} \
-                           -Psigning.gnupg.passphrase=${{ secrets.CI_GPG_PASSPHARSE }} \
+          args=( -Pversion=${{ needs.context.outputs.version }} \
+                           -PsemanticVersion=${{ needs.context.outputs.semanticVersion }} \
                            -Pnexus.username=${{ secrets.OSS_SONATYPE_USER }} \
                            -Pnexus.password=${{ secrets.OSS_SONATYPE_PASSWORD }} )
-          [[ "${{ needs.context.outputs.isRelease }}" == 'true' ]] && args+=( -Prelease )
           ./gradlew publish "${args[@]}"
 
   analysis:
@@ -182,7 +172,23 @@ jobs:
     if: needs.context.outputs.isRelease == 'true'
     steps:
       - uses: actions/checkout@v2
-      - run: |
-          ./gradlew closeAndReleaseRepository \
-                            -Pnexus.username=${{ secrets.OSS_SONATYPE_USER }} \
-                            -Pnexus.password=${{ secrets.OSS_SONATYPE_PASSWORD }} || echo 'Need to promote manually'
+
+      - name: Import GPG key
+        id: import_gpg
+        uses: crazy-max/ghaction-import-gpg@v3
+        with:
+          git-user-signingkey: true
+          gpg-private-key: ${{ secrets.CI_GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.CI_GPG_PASSPHARSE }}
+
+      - name: Publish Sonatype OSSRH
+        run: |
+          args=( -Pversion=${{ needs.context.outputs.version }} \
+                 -PsemanticVersion=${{ needs.context.outputs.semanticVersion }} \
+                 -PbuildBy="GitHub Action" -PbuildHash=${{ needs.context.outputs.commitId }} \
+                 -Psigning.gnupg.homeDir=/home/runner/.gnupg \
+                 -Psigning.gnupg.keyName=${{ steps.import_gpg.outputs.keyid }} \
+                 -Psigning.gnupg.passphrase=${{ secrets.CI_GPG_PASSPHARSE }} \
+                 -Pnexus.username=${{ secrets.OSS_SONATYPE_USER }} \
+                 -Pnexus.password=${{ secrets.OSS_SONATYPE_PASSWORD }} )
+          ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository -Prelease "${args[@]}"
