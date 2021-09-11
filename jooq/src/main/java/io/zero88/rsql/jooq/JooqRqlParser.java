@@ -1,17 +1,17 @@
 package io.zero88.rsql.jooq;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.jooq.Condition;
 import org.jooq.TableLike;
 
+import io.zero88.rsql.jooq.criteria.JooqComparisonCriteriaBuilderLoader;
 import io.zero88.rsql.jooq.visitor.JooqConditionRqlVisitor;
 import io.zero88.rsql.jooq.visitor.JooqDSLRqlVisitor;
-import io.zero88.rsql.parser.ast.ComparisonOperatorProxy;
 
 import cz.jirutka.rsql.parser.RSQLParser;
 import cz.jirutka.rsql.parser.RSQLParserException;
+import cz.jirutka.rsql.parser.ast.ComparisonOperator;
 import lombok.NonNull;
 
 /**
@@ -33,20 +33,19 @@ public final class JooqRqlParser {
      *
      * @since 1.0.0
      */
-    private JooqRqlParser() {
-        this(ComparisonOperatorProxy.operators());
+    public JooqRqlParser() {
+        this(JooqComparisonCriteriaBuilderLoader.getInstance().operators());
     }
 
     /**
      * Instantiates a new {@code Jooq RQL} parser.
      *
      * @param comparisons the comparisons
-     * @see ComparisonOperatorProxy
+     * @see ComparisonOperator
      * @since 1.0.0
      */
-    public JooqRqlParser(@NonNull Set<ComparisonOperatorProxy> comparisons) {
-        parser = new RSQLParser(
-            comparisons.stream().map(ComparisonOperatorProxy::operator).collect(Collectors.toSet()));
+    public JooqRqlParser(@NonNull Set<ComparisonOperator> comparisons) {
+        parser = new RSQLParser(comparisons);
     }
 
     /**

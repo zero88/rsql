@@ -7,6 +7,8 @@ import org.jooq.Condition;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import io.github.zero88.utils.Strings;
+import io.zero88.rsql.jooq.Tables;
 import io.zero88.rsql.jooq.criteria.JooqCriteriaBuilder;
 import io.zero88.rsql.jooq.criteria.JooqCriteriaBuilderFactory;
 import io.zero88.rsql.jooq.criteria.comparison.BetweenBuilder;
@@ -21,8 +23,7 @@ import io.zero88.rsql.jooq.criteria.comparison.NonExistsBuilder;
 import io.zero88.rsql.jooq.criteria.comparison.NotEqualBuilder;
 import io.zero88.rsql.jooq.criteria.comparison.NotInBuilder;
 import io.zero88.rsql.jooq.criteria.comparison.NullableBuilder;
-import io.github.zero88.utils.Strings;
-import io.zero88.rsql.jooq.Tables;
+import io.zero88.rsql.parser.ast.ComparisonOperatorProxy;
 
 import cz.jirutka.rsql.parser.ast.ComparisonNode;
 import cz.jirutka.rsql.parser.ast.RSQLOperators;
@@ -100,7 +101,7 @@ public class ComparisonCriteriaBuilderTest {
         Assertions.assertTrue(builder instanceof InBuilder);
         final Condition condition = builder.build(Tables.ALL_DATA_TYPE);
         Assertions.assertEquals("\"ALL_DATA_TYPE\".\"ID\" in ( 5, 7, 10 )",
-                            Strings.optimizeMultipleSpace(condition.toString()));
+                                Strings.optimizeMultipleSpace(condition.toString()));
     }
 
     @Test
@@ -111,12 +112,13 @@ public class ComparisonCriteriaBuilderTest {
         Assertions.assertTrue(builder instanceof NotInBuilder);
         final Condition condition = builder.build(Tables.ALL_DATA_TYPE);
         Assertions.assertEquals("\"ALL_DATA_TYPE\".\"ID\" not in ( 5, 7, 10 )",
-                            Strings.optimizeMultipleSpace(condition.toString()));
+                                Strings.optimizeMultipleSpace(condition.toString()));
     }
 
     @Test
     public void test_between_node() {
-        final ComparisonNode node = new ComparisonNode(BetweenBuilder.OPERATOR, Tables.ALL_DATA_TYPE.F_DATE.getName(),
+        final ComparisonNode node = new ComparisonNode(ComparisonOperatorProxy.BETWEEN.operator(),
+                                                       Tables.ALL_DATA_TYPE.F_DATE.getName(),
                                                        Arrays.asList("2020-04-05T08:00:00", "2020-04-08T08:00:00"));
         final JooqCriteriaBuilder builder = JooqCriteriaBuilderFactory.DEFAULT.create(node);
         Assertions.assertTrue(builder instanceof BetweenBuilder);
@@ -130,7 +132,8 @@ public class ComparisonCriteriaBuilderTest {
 
     @Test
     public void test_exists_node() {
-        final ComparisonNode node = new ComparisonNode(ExistsBuilder.OPERATOR, Tables.ALL_DATA_TYPE.F_PERIOD.getName(),
+        final ComparisonNode node = new ComparisonNode(ComparisonOperatorProxy.EXISTS.operator(),
+                                                       Tables.ALL_DATA_TYPE.F_PERIOD.getName(),
                                                        Collections.singletonList("t"));
         final JooqCriteriaBuilder builder = JooqCriteriaBuilderFactory.DEFAULT.create(node);
         Assertions.assertTrue(builder instanceof ExistsBuilder);
@@ -138,31 +141,32 @@ public class ComparisonCriteriaBuilderTest {
         System.out.println(node.toString());
         System.out.println(condition.toString());
         Assertions.assertEquals("\"ALL_DATA_TYPE\".\"F_PERIOD\" is not null",
-                            Strings.optimizeMultipleSpace(condition.toString()));
+                                Strings.optimizeMultipleSpace(condition.toString()));
     }
 
     @Test
     public void test_non_exists_node() {
-        final ComparisonNode node = new ComparisonNode(NonExistsBuilder.OPERATOR,
+        final ComparisonNode node = new ComparisonNode(ComparisonOperatorProxy.NON_EXISTS.operator(),
                                                        Tables.ALL_DATA_TYPE.F_DURATION.getName(),
                                                        Collections.singletonList("t"));
         final JooqCriteriaBuilder builder = JooqCriteriaBuilderFactory.DEFAULT.create(node);
         Assertions.assertTrue(builder instanceof NonExistsBuilder);
         final Condition condition = builder.build(Tables.ALL_DATA_TYPE);
         Assertions.assertEquals("\"ALL_DATA_TYPE\".\"F_DURATION\" is null",
-                            Strings.optimizeMultipleSpace(condition.toString()));
+                                Strings.optimizeMultipleSpace(condition.toString()));
     }
 
     @Test
     public void test_nullable_node() {
-        final ComparisonNode node = new ComparisonNode(NullableBuilder.OPERATOR,
+        final ComparisonNode node = new ComparisonNode(ComparisonOperatorProxy.NULLABLE.operator(),
                                                        Tables.ALL_DATA_TYPE.F_VALUE_JSON.getName(),
                                                        Collections.singletonList("t"));
         final JooqCriteriaBuilder builder = JooqCriteriaBuilderFactory.DEFAULT.create(node);
         Assertions.assertTrue(builder instanceof NullableBuilder);
         final Condition condition = builder.build(Tables.ALL_DATA_TYPE);
-        Assertions.assertEquals("( \"ALL_DATA_TYPE\".\"F_VALUE_JSON\" is null or \"ALL_DATA_TYPE\"" +
-                            ".\"F_VALUE_JSON\" = 't' )", Strings.optimizeMultipleSpace(condition.toString()));
+        Assertions.assertEquals(
+            "( \"ALL_DATA_TYPE\".\"F_VALUE_JSON\" is null or \"ALL_DATA_TYPE\"" + ".\"F_VALUE_JSON\" = 't' )",
+            Strings.optimizeMultipleSpace(condition.toString()));
     }
 
 }

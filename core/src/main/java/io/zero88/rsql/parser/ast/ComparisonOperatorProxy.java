@@ -17,6 +17,7 @@ import lombok.NonNull;
  * @see ComparisonOperator
  * @since 1.0.0
  */
+@FunctionalInterface
 public interface ComparisonOperatorProxy {
 
     /**
@@ -54,37 +55,23 @@ public interface ComparisonOperatorProxy {
     /**
      * The constant BETWEEN.
      */
-    ComparisonOperatorProxy BETWEEN = () -> BuiltinComparisonOperator.BETWEEN;
+    ComparisonOperatorProxy BETWEEN = () -> new ComparisonOperator("=between=", true);
     /**
      * The constant EXISTS.
      */
-    ComparisonOperatorProxy EXISTS = () -> BuiltinComparisonOperator.EXISTS;
+    ComparisonOperatorProxy EXISTS = () -> new ComparisonOperator("=exists=", "=nn=");
     /**
      * The constant NON_EXISTS.
      */
-    ComparisonOperatorProxy NON_EXISTS = () -> BuiltinComparisonOperator.NON_EXISTS;
+    ComparisonOperatorProxy NON_EXISTS = () -> new ComparisonOperator("=null=", "=isn=");
     /**
      * The constant NULLABLE.
      */
-    ComparisonOperatorProxy NULLABLE = () -> BuiltinComparisonOperator.NULLABLE;
+    ComparisonOperatorProxy NULLABLE = () -> new ComparisonOperator("=nullable=");
 
-    ComparisonOperatorProxy LIKE = () -> BuiltinComparisonOperator.LIKE;
+    ComparisonOperatorProxy LIKE = () -> new ComparisonOperator("=like=");
 
-    ComparisonOperatorProxy NOT_LIKE = () -> BuiltinComparisonOperator.NOT_LIKE;
-
-    /**
-     * Parse comparison operator to proxy comparison operator.
-     *
-     * @param operator the operator
-     * @return the comparison operator proxy
-     * @since 1.0.0
-     */
-    static @NonNull ComparisonOperatorProxy asProxy(@NonNull ComparisonOperator operator) {
-        return ReflectionField.streamConstants(ComparisonOperatorProxy.class)
-                              .filter(proxy -> proxy.operator().equals(operator))
-                              .findFirst()
-                              .orElseThrow(() -> new IllegalArgumentException("Unknown operation " + operator));
-    }
+    ComparisonOperatorProxy NOT_LIKE = () -> new ComparisonOperator("=nk=", "=unlike=");
 
     /**
      * Get set of default comparison operators.

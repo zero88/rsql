@@ -24,17 +24,14 @@ import lombok.experimental.Accessors;
 public abstract class JooqComparisonCriteriaBuilder extends AbstractCriteriaBuilder<ComparisonNode>
     implements JooqCriteriaBuilder<ComparisonNode>, ComparisonCriteriaBuilder<ComparisonOperatorProxy> {
 
-    @NonNull
-    private final ComparisonOperatorProxy operator;
-
-    public JooqComparisonCriteriaBuilder(@NonNull ComparisonNode node) {
-        this(node, ComparisonOperatorProxy.asProxy(node.getOperator()));
-    }
-
-    protected JooqComparisonCriteriaBuilder(@NonNull ComparisonNode node,
-                                            @NonNull ComparisonOperatorProxy operator) {
-        super(node);
-        this.operator = operator;
+    @Override
+    public final ComparisonCriteriaBuilder<ComparisonOperatorProxy> setup(@NonNull ComparisonNode node) {
+        if (!operator().operator().equals(node.getOperator())) {
+            throw new IllegalArgumentException(
+                "Not match comparison operation [" + operator().operator() + "][" + node.getOperator() + "]");
+        }
+        this.node = node;
+        return this;
     }
 
     @Override
