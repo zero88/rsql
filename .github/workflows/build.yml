@@ -50,6 +50,7 @@ jobs:
         with:
           mustSign: true
           nextVerMode: PATCH
+          defaultBranch: master
 
       - name: Find semantic version
         id: semantic
