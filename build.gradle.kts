@@ -7,8 +7,6 @@ plugins {
     id(PluginLibs.nexusPublish) version PluginLibs.Version.nexusPublish
 }
 
-apply(plugin = ZeroLibs.Plugins.root)
-
 allprojects {
     group = "io.github.zero88"
 
@@ -22,6 +20,8 @@ allprojects {
 }
 
 subprojects {
+    apply(plugin = "eclipse")
+    apply(plugin = "idea")
     apply(plugin = ZeroLibs.Plugins.oss)
     java {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -53,7 +53,6 @@ subprojects {
     oss {
         zero88.set(true)
         publishingInfo {
-            enabled.set(true)
             homepage.set("https://github.com/zero88/rsql")
             license {
                 name.set("The Apache License, Version 2.0")
@@ -67,6 +66,8 @@ subprojects {
         }
     }
 }
+
+apply(plugin = ZeroLibs.Plugins.root)
 
 nexusPublishing {
     packageGroup.set("io.github.zero88")
