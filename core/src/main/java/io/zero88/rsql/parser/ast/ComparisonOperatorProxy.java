@@ -20,65 +20,77 @@ import cz.jirutka.rsql.parser.ast.RSQLOperators;
 public final class ComparisonOperatorProxy {
 
     /**
-     * The constant EQUAL.
+     * The operator EQUAL.
      */
     public static final ComparisonOperatorProxy EQUAL = ComparisonOperatorProxy.wrap(RSQLOperators.EQUAL);
     /**
-     * The constant NOT_EQUAL.
+     * The operator NOT_EQUAL.
      */
     public static final ComparisonOperatorProxy NOT_EQUAL = ComparisonOperatorProxy.wrap(RSQLOperators.NOT_EQUAL);
     /**
-     * The constant GREATER_THAN.
+     * The operator GREATER_THAN.
      */
     public static final ComparisonOperatorProxy GREATER_THAN = ComparisonOperatorProxy.wrap(RSQLOperators.GREATER_THAN);
     /**
-     * The constant GREATER_THAN_OR_EQUAL.
+     * The operator GREATER_THAN_OR_EQUAL.
      */
     // @formatter:off
     public static final ComparisonOperatorProxy GREATER_THAN_OR_EQUAL = ComparisonOperatorProxy.wrap(RSQLOperators.GREATER_THAN_OR_EQUAL);
     // @formatter:on
     /**
-     * The constant LESS_THAN.
+     * The operator LESS_THAN.
      */
     public static final ComparisonOperatorProxy LESS_THAN = ComparisonOperatorProxy.wrap(RSQLOperators.LESS_THAN);
     /**
-     * The constant LESS_THAN_OR_EQUAL.
+     * The operator LESS_THAN_OR_EQUAL.
      */
     // @formatter:off
     public static final ComparisonOperatorProxy LESS_THAN_OR_EQUAL = ComparisonOperatorProxy.wrap(RSQLOperators.LESS_THAN_OR_EQUAL);
     // @formatter:on
     /**
-     * The constant IN.
+     * The operator IN.
      */
     public static final ComparisonOperatorProxy IN = ComparisonOperatorProxy.wrap(RSQLOperators.IN);
     /**
-     * The constant NOT_IN.
+     * The operator NOT_IN.
      */
     public static final ComparisonOperatorProxy NOT_IN = ComparisonOperatorProxy.wrap(RSQLOperators.NOT_IN);
     /**
-     * The constant BETWEEN.
+     * The operator BETWEEN.
      */
     public static final ComparisonOperatorProxy BETWEEN = ComparisonOperatorProxy.multiValue("=between=");
     /**
-     * The constant EXISTS.
+     * The operator EXISTS.
      */
     public static final ComparisonOperatorProxy EXISTS = ComparisonOperatorProxy.create("=exists=", "=nn=");
     /**
-     * The constant NON_EXISTS.
+     * The operator NON_EXISTS.
      */
     public static final ComparisonOperatorProxy NON_EXISTS = ComparisonOperatorProxy.create("=null=", "=isn=");
     /**
-     * The constant NULLABLE.
+     * The operator NULLABLE.
      */
     public static final ComparisonOperatorProxy NULLABLE = ComparisonOperatorProxy.create("=nullable=");
     /**
-     * The constant LIKE
+     * The operator LIKE
      */
     public static final ComparisonOperatorProxy LIKE = ComparisonOperatorProxy.create("=like=");
     /**
-     * The constant NOT_LIKE
+     * The operator NOT_LIKE
      */
-    public static final ComparisonOperatorProxy NOT_LIKE = ComparisonOperatorProxy.create("=nk=", "=unlike=");
+    public static final ComparisonOperatorProxy NOT_LIKE = ComparisonOperatorProxy.create("=unlike=", "=nk=");
+    /**
+     * The operator CONTAINS
+     */
+    public static final ComparisonOperatorProxy CONTAINS = ComparisonOperatorProxy.create("=contains=");
+    /**
+     * The operator STARTS_WITH
+     */
+    public static final ComparisonOperatorProxy STARTS_WITH = ComparisonOperatorProxy.create("=startswith=", "=sw=");
+    /**
+     * The operator ENDS_WITH
+     */
+    public static final ComparisonOperatorProxy ENDS_WITH = ComparisonOperatorProxy.create("=endswith=", "=ew=");
 
     private final ComparisonOperator operator;
     private final String[] symbols;

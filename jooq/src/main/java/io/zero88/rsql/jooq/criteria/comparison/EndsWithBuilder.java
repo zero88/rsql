@@ -12,18 +12,18 @@ import io.zero88.rsql.parser.ast.ComparisonOperatorProxy;
 
 import lombok.NonNull;
 
-public final class NotEqualBuilder extends JooqComparisonCriteriaBuilder {
+public final class EndsWithBuilder extends JooqComparisonCriteriaBuilder {
 
     @Override
     public @NonNull ComparisonOperatorProxy operator() {
-        return ComparisonOperatorProxy.NOT_EQUAL;
+        return ComparisonOperatorProxy.ENDS_WITH;
     }
 
     @Override
     protected @NonNull Condition compare(@NonNull Field field, @NonNull List<String> arguments,
                                          @NonNull JooqArgumentParser argParser,
                                          @NonNull LikeWildcardPattern wildcardPattern) {
-        return field.ne(argParser.parse(field, arguments.get(0)));
+        return field.endsWith(argParser.parse(field, arguments.get(0)));
     }
 
 }

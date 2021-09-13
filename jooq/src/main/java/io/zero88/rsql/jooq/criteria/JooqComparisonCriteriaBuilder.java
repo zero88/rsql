@@ -7,6 +7,7 @@ import org.jooq.Field;
 import org.jooq.TableLike;
 import org.jooq.impl.DSL;
 
+import io.zero88.rsql.LikeWildcardPattern;
 import io.zero88.rsql.criteria.AbstractCriteriaBuilder;
 import io.zero88.rsql.criteria.ComparisonCriteriaBuilder;
 import io.zero88.rsql.jooq.JooqArgumentParser;
@@ -38,13 +39,14 @@ public abstract class JooqComparisonCriteriaBuilder extends AbstractCriteriaBuil
     public @NonNull Condition build(@NonNull TableLike table, @NonNull JooqQueryContext queryContext,
                                     @NonNull JooqCriteriaBuilderFactory factory) {
         final JooqFieldMapper fieldMapper = queryContext.fieldMapper();
-        final JooqArgumentParser parser = queryContext.argumentParser();
         return fieldMapper.get(table, node().getSelector())
-                          .map(f -> compare(f, node().getArguments(), parser))
+                          .map(f -> compare(f, node().getArguments(), queryContext.argumentParser(),
+                                            queryContext.likeWildcard()))
                           .orElse(DSL.noCondition());
     }
 
     protected abstract @NonNull Condition compare(@NonNull Field field, @NonNull List<String> arguments,
-                                                  @NonNull JooqArgumentParser parser);
+                                                  @NonNull JooqArgumentParser argParser,
+                                                  @NonNull LikeWildcardPattern wildcardPattern);
 
 }

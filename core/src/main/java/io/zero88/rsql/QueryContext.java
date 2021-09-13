@@ -10,7 +10,7 @@ import lombok.NonNull;
 public interface QueryContext {
 
     /**
-     * Like wildcard like wildcard pattern.
+     * Like wildcard pattern.
      *
      * @return the like wildcard pattern
      * @see LikeWildcardPattern
