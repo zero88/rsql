@@ -12,7 +12,6 @@ import io.zero88.rsql.jooq.visitor.JooqDSLRqlVisitor;
 import io.zero88.rsql.parser.ast.ComparisonOperatorProxy;
 
 import cz.jirutka.rsql.parser.RSQLParserException;
-import cz.jirutka.rsql.parser.ast.ComparisonOperator;
 import lombok.NonNull;
 
 /**
@@ -30,6 +29,7 @@ public final class JooqRqlParser extends RqlParser {
     /**
      * Instantiates a new {@code jOOQ RQL} parser with default Comparison Operator.
      *
+     * @see JooqComparisonCriteriaBuilderLoader
      * @since 1.0.0
      */
     public JooqRqlParser() {
@@ -40,7 +40,7 @@ public final class JooqRqlParser extends RqlParser {
      * Instantiates a new {@code Jooq RQL} parser.
      *
      * @param comparisons the comparisons
-     * @see ComparisonOperator
+     * @see ComparisonOperatorProxy
      * @since 1.0.0
      */
     public JooqRqlParser(@NonNull Set<ComparisonOperatorProxy> comparisons) {

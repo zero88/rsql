@@ -5,8 +5,8 @@ import java.util.Optional;
 import org.jooq.Field;
 import org.jooq.TableLike;
 
-import io.zero88.rsql.FieldMapper;
 import io.github.zero88.utils.Strings;
+import io.zero88.rsql.FieldMapper;
 
 import lombok.NonNull;
 
@@ -15,6 +15,7 @@ import lombok.NonNull;
  *
  * @since 1.0.0
  */
+@FunctionalInterface
 public interface JooqFieldMapper extends FieldMapper {
 
     /**

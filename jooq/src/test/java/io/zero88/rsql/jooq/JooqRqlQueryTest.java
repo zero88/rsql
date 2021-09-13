@@ -31,13 +31,13 @@ public class JooqRqlQueryTest {
                              "=exists=t" + " and " + "(" + Tables.TABLE_TYPE.getName() + "=in=(xyz,abc)" + "," +
                              Tables.TABLE_CLASS.getName() + "=out=(123,456)" + ")";
         final Condition condition = jooqRqlParser.criteria(query, Tables.TABLES);
+        System.out.println(query);
+        System.out.println(Strings.optimizeMultipleSpace(condition.toString()));
         Assertions.assertEquals("( \"INFORMATION_SCHEMA\".\"TABLES\".\"TABLE_SCHEMA\" = 'public' and " +
                                 "\"INFORMATION_SCHEMA\".\"TABLES\".\"TABLE_NAME\" is not null and ( " +
                                 "\"INFORMATION_SCHEMA\".\"TABLES\".\"TABLE_TYPE\" in ( 'xyz', 'abc' ) or " +
                                 "\"INFORMATION_SCHEMA\".\"TABLES\".\"TABLE_CLASS\" not in ( '123', '456' ) ) )",
                                 Strings.optimizeMultipleSpace(condition.toString()));
-        System.out.println(query);
-        System.out.println(Strings.optimizeMultipleSpace(condition.toString()));
         Assertions.assertEquals(0, JooqFetchCountQuery.builder()
                                                       .parser(jooqRqlParser)
                                                       .dsl(dsl)
@@ -53,6 +53,8 @@ public class JooqRqlQueryTest {
                              "=exists=x" + " and " + "(" + Tables.TABLE_TYPE.getName() + "=in=(xyz,abc)" + "," +
                              Tables.TABLE_CLASS.getName() + "=out=(123,456)" + ")";
         final Condition condition = jooqRqlParser.criteria(query, Tables.TABLES);
+        System.out.println(query);
+        System.out.println(Strings.optimizeMultipleSpace(condition.toString()));
         Assertions.assertEquals("( \"INFORMATION_SCHEMA\".\"TABLES\".\"TABLE_SCHEMA\" = 'public' and " +
                                 "\"INFORMATION_SCHEMA\".\"TABLES\".\"TABLE_NAME\" is not null and ( " +
                                 "\"INFORMATION_SCHEMA\".\"TABLES\".\"TABLE_TYPE\" in ( 'xyz', 'abc' ) or " +
