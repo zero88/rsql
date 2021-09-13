@@ -50,7 +50,7 @@ public class JooqRqlQueryTest {
     @Test
     public void test_h2_exist() {
         final String query = Tables.TABLE_SCHEMA.getName() + "==public" + ";" + Tables.TABLE_NAME.getName() +
-                             "=exists=x" + " and " + "(" + Tables.TABLE_TYPE.getName() + "=in=(xyz,abc)" + "," +
+                             "=exists=1" + " and " + "(" + Tables.TABLE_TYPE.getName() + "=in=(xyz,abc)" + "," +
                              Tables.TABLE_CLASS.getName() + "=out=(123,456)" + ")";
         final Condition condition = jooqRqlParser.criteria(query, Tables.TABLES);
         System.out.println(query);

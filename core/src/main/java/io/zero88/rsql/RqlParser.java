@@ -16,6 +16,43 @@ import io.zero88.rsql.parser.ast.ComparisonOperatorProxy;
 import cz.jirutka.rsql.parser.RSQLParserException;
 import cz.jirutka.rsql.parser.ast.Node;
 
+/**
+ * Parser of the RSQL (RESTful Service Query Language).
+ *
+ * <p>RSQL is a query language for parametrized filtering of entries in RESTful APIs. It's a
+ * superset of the <a href="http://tools.ietf.org/html/draft-nottingham-atompub-fiql-00">FIQL</a> (Feed Item Query
+ * Language), so it can be used for parsing FIQL as well.</p>
+ *
+ * <p><b>Grammar in EBNF notation:</b>
+ * <pre>{@code
+ * input          = or, EOF;
+ * or             = and, { ( "," | " or " ) , and };
+ * and            = constraint, { ( ";" | " and " ), constraint };
+ * constraint     = ( group | comparison );
+ * group          = "(", or, ")";
+ *
+ * comparison     = selector, comparator, arguments;
+ * selector       = unreserved-str;
+ *
+ * comparator     = comp-fiql | comp-alt;
+ * comp-fiql      = ( ( "=", { ALPHA } ) | "!" ), "=";
+ * comp-alt       = ( ">" | "<" ), [ "=" ];
+ *
+ * arguments      = ( "(", value, { "," , value }, ")" ) | value;
+ * value          = unreserved-str | double-quoted | single-quoted;
+ *
+ * unreserved-str = unreserved, { unreserved }
+ * single-quoted  = "'", { ( escaped | all-chars - ( "'" | "\" ) ) }, "'";
+ * double-quoted  = '"', { ( escaped | all-chars - ( '"' | "\" ) ) }, '"';
+ *
+ * reserved       = '"' | "'" | "(" | ")" | ";" | "," | "=" | "!" | "~" | "<" | ">" | " ";
+ * unreserved     = all-chars - reserved;
+ * escaped        = "\", all-chars;
+ * all-chars      = ? all unicode characters ?;
+ * }</pre>
+ *
+ * @since 1.0.0
+ */
 public class RqlParser {
 
     private final NodesFactory nodesFactory;

@@ -19,7 +19,7 @@ import lombok.NonNull;
 public interface JooqCriteriaBuilderFactory extends CriteriaBuilderFactory<Node, JooqCriteriaBuilder<Node>> {
 
     /**
-     * The constant DEFAULT.
+     * The default {@code jOOQ} criteria builder
      */
     JooqCriteriaBuilderFactory DEFAULT = new JooqCriteriaBuilderFactory() {};
 

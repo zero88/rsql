@@ -12,7 +12,6 @@ import io.zero88.rsql.parser.ast.ComparisonOperatorProxy;
 
 import lombok.NonNull;
 
-//TODO implement it
 public final class NotLikeBuilder extends JooqComparisonCriteriaBuilder {
 
     @Override
@@ -24,7 +23,9 @@ public final class NotLikeBuilder extends JooqComparisonCriteriaBuilder {
     protected @NonNull Condition compare(@NonNull Field field, @NonNull List<String> arguments,
                                          @NonNull JooqArgumentParser argParser,
                                          @NonNull LikeWildcardPattern wildcardPattern) {
-        throw new UnsupportedOperationException("Not yet implemented");
+        return wildcardPattern.isRegexEnabled()
+               ? field.notLikeRegex(arguments.get(0))
+               : field.notLike(wildcardPattern.convert(arguments.get(0)), wildcardPattern.escape());
     }
 
 }
