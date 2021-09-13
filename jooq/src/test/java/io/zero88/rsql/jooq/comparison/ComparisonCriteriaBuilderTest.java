@@ -14,6 +14,8 @@ import io.zero88.rsql.jooq.Tables;
 import io.zero88.rsql.jooq.criteria.JooqCriteriaBuilder;
 import io.zero88.rsql.jooq.criteria.JooqCriteriaBuilderFactory;
 import io.zero88.rsql.jooq.criteria.comparison.BetweenBuilder;
+import io.zero88.rsql.jooq.criteria.comparison.ContainsBuilder;
+import io.zero88.rsql.jooq.criteria.comparison.EndsWithBuilder;
 import io.zero88.rsql.jooq.criteria.comparison.EqualBuilder;
 import io.zero88.rsql.jooq.criteria.comparison.ExistsBuilder;
 import io.zero88.rsql.jooq.criteria.comparison.GreaterThanBuilder;
@@ -27,6 +29,7 @@ import io.zero88.rsql.jooq.criteria.comparison.NotEqualBuilder;
 import io.zero88.rsql.jooq.criteria.comparison.NotInBuilder;
 import io.zero88.rsql.jooq.criteria.comparison.NotLikeBuilder;
 import io.zero88.rsql.jooq.criteria.comparison.NullableBuilder;
+import io.zero88.rsql.jooq.criteria.comparison.StartsWithBuilder;
 import io.zero88.rsql.parser.ast.ComparisonOperatorProxy;
 
 import cz.jirutka.rsql.parser.ast.ComparisonNode;
@@ -212,6 +215,45 @@ public class ComparisonCriteriaBuilderTest {
         Assertions.assertTrue(builder instanceof NotLikeBuilder);
         final Condition condition = builder.build(Tables.ALL_DATA_TYPE);
         Assertions.assertEquals("\"ALL_DATA_TYPE\".\"F_STR\" not like '%test\\%' escape '\\'",
+                                Strings.optimizeMultipleSpace(condition.toString()));
+    }
+
+    @Test
+    public void test_contains_node() {
+        final ComparisonNode node = new ComparisonNode(ComparisonOperatorProxy.CONTAINS.operator(),
+                                                       Tables.ALL_DATA_TYPE.F_STR.getName(),
+                                                       Collections.singletonList("test"));
+        final JooqCriteriaBuilder builder = JooqCriteriaBuilderFactory.DEFAULT.create(node);
+        Assertions.assertTrue(builder instanceof ContainsBuilder);
+        final Condition condition = builder.build(Tables.ALL_DATA_TYPE);
+        Assertions.assertEquals("\"ALL_DATA_TYPE\".\"F_STR\" like ('%' || replace( replace( replace( 'test', '!', " +
+                                "'!!' ), '%', '!%' ), '_', '!_' ) || '%') escape '!'",
+                                Strings.optimizeMultipleSpace(condition.toString()));
+    }
+
+    @Test
+    public void test_startswith_node() {
+        final ComparisonNode node = new ComparisonNode(ComparisonOperatorProxy.STARTS_WITH.operator(),
+                                                       Tables.ALL_DATA_TYPE.F_STR.getName(),
+                                                       Collections.singletonList("test"));
+        final JooqCriteriaBuilder builder = JooqCriteriaBuilderFactory.DEFAULT.create(node);
+        Assertions.assertTrue(builder instanceof StartsWithBuilder);
+        final Condition condition = builder.build(Tables.ALL_DATA_TYPE);
+        Assertions.assertEquals("\"ALL_DATA_TYPE\".\"F_STR\" like (replace( replace( replace( 'test', '!', '!!' ), " +
+                                "'%', '!%' ), '_', '!_' ) || '%') escape '!'",
+                                Strings.optimizeMultipleSpace(condition.toString()));
+    }
+
+    @Test
+    public void test_endswith_node() {
+        final ComparisonNode node = new ComparisonNode(ComparisonOperatorProxy.ENDS_WITH.operator(),
+                                                       Tables.ALL_DATA_TYPE.F_STR.getName(),
+                                                       Collections.singletonList("test"));
+        final JooqCriteriaBuilder builder = JooqCriteriaBuilderFactory.DEFAULT.create(node);
+        Assertions.assertTrue(builder instanceof EndsWithBuilder);
+        final Condition condition = builder.build(Tables.ALL_DATA_TYPE);
+        Assertions.assertEquals("\"ALL_DATA_TYPE\".\"F_STR\" like ('%' || replace( replace( replace( 'test', '!', '!!' ), " +
+                                "'%', '!%' ), '_', '!_' )) escape '!'",
                                 Strings.optimizeMultipleSpace(condition.toString()));
     }
 
